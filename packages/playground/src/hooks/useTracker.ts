@@ -10,13 +10,13 @@ export const useTracker = (id: string) => {
 
   useMount(() => {
     IndexMap.set(id, IndexMap.get(id) + 1)
-    console.log(
+    console.warn(
       `================= 第 ${IndexMap.get(id)} 个 ${id} 加载 ================`
     )
   })
 
   useUnmount(() => {
-    console.log(
+    console.warn(
       `~~~~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 卸载 ~~~~~~~~~~~~~~~~`
     )
     IndexMap.set(id, IndexMap.get(id) - 1)

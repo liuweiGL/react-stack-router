@@ -1,4 +1,4 @@
-import { createElement, useMemo } from 'react'
+import { useMemo } from 'react'
 
 import { createBrowserHistory, createHashHistory, History } from 'history'
 
@@ -17,10 +17,6 @@ export type RouterProps = {
 }
 
 const renderRoutes = (routes: StackRoute[]) => {
-  // console.log(`routes`, routes)
-
-  // console.log(`inactiveRoutes`, inactiveRoutes)
-
   return routes.map(({ pageKey, component: RouteComponent }, index) => {
     const status = index === routes.length - 1 ? 'show' : 'hide'
     return (

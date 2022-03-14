@@ -1,4 +1,4 @@
-import { BrowserRouter, HashRouter, Route } from 'react-mobile-router'
+import { BrowserRouter, Route } from 'react-mobile-router'
 
 import DetailPage from './pages/Detail'
 import HomePage from './pages/Home'
