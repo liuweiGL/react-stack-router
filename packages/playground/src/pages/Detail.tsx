@@ -17,8 +17,12 @@ const DetailPage = () => {
         长大以后难过都要藏起来 行至朝雾里，坠入暮云间。 好好生活 慢慢相遇ᴸⁱᵛᵉ ᵃ
         ᵍᵒᵒᵈ ˡⁱᶠᵉ ᵐᵉᵉᵗ ˢˡᵒʷˡʸ 不求人好感 不予人难堪
       </article>
-
-      <Navigator title='返回首页' type='navigateTo' url='/' />
+      <br />
+      <br />
+      <Navigator title='重新进入首页' type='navigateTo' url='/' />
+      <br />
+      <br />
+      <Navigator name='redirect' title='进入重定向页面' type='navigateTo' />
     </div>
   )
 }

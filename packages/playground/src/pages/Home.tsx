@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { Navigator } from 'react-mobile-router'
 
 import { useTracker } from '../hooks/useTracker'
 
 const HomePage = () => {
   useTracker('Home')
+
+  const [state, setState] = useState(2222222)
 
   return (
     <div className='home-page'>
@@ -28,6 +31,12 @@ const HomePage = () => {
       with multiple config file paths (e.g. tsc -b src test). Just like tsc -p,
       specifying the config file name itself is unnecessary if it’s named
       tsconfig.json.
+      <br />
+      <br />
+      <code>{state}</code>
+      <br />
+      <br />
+      <button onClick={() => setState(11111111)}>设置状态</button>
       <br />
       <br />
       <Navigator name='list'>前往列表页</Navigator>

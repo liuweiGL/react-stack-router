@@ -1,27 +1,44 @@
 import { BrowserRouter, Route } from 'react-mobile-router'
 
-import DetailPage from './pages/Detail'
 import HomePage from './pages/Home'
 import ListPage from './pages/List'
+import RedirectPage from './pages/Redirect'
 
 const routes: Route[] = [
   {
+    type: 'tab',
     name: 'home',
     path: '/',
-    title: '首页',
-    component: HomePage
+    component: HomePage,
+    meta: {
+      title: '首页'
+    }
   },
   {
     name: 'list',
     path: '/list',
-    title: '列表页',
-    component: ListPage
+    component: ListPage,
+    meta: {
+      title: '列表页'
+    }
   },
   {
     name: 'detail',
     path: '/detail',
-    title: '详情页',
-    component: DetailPage
+    component: () => {
+      return import('./pages/Detail')
+    },
+    meta: {
+      title: '详情页'
+    }
+  },
+  {
+    name: 'redirect',
+    path: '/redirect',
+    component: RedirectPage,
+    meta: {
+      title: '重定向'
+    }
   }
 ]
 

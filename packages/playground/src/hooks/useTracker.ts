@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useMount } from './useMount'
 import { useUnmount } from './useUnmount'
 
@@ -10,14 +11,16 @@ export const useTracker = (id: string) => {
 
   useMount(() => {
     IndexMap.set(id, IndexMap.get(id) + 1)
-    console.warn(
-      `================= 第 ${IndexMap.get(id)} 个 ${id} 加载 ================`
+    console.log(
+      `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 加载 ~~~~~~~~~~~~~~`,
+      'color: green'
     )
   })
 
   useUnmount(() => {
-    console.warn(
-      `~~~~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 卸载 ~~~~~~~~~~~~~~~~`
+    console.log(
+      `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 卸载 ~~~~~~~~~~~~~~`,
+      'color: red'
     )
     IndexMap.set(id, IndexMap.get(id) - 1)
   })
