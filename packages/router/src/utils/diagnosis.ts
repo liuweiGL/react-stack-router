@@ -8,10 +8,10 @@ export function assert(cond: any, message: string): asserts cond {
   if (!cond) throw new Error(message)
 }
 
-export function warning(cond: any, message: string): void {
+function log(method: 'warn' | 'error', cond: any, message: string): void {
   if (cond) {
     // eslint-disable-next-line no-console
-    if (typeof console !== 'undefined') console.warn(message)
+    if (typeof console !== 'undefined') console[method](message)
 
     try {
       // Welcome to debugging React Router!
@@ -23,4 +23,12 @@ export function warning(cond: any, message: string): void {
       // eslint-disable-next-line no-empty
     } catch (e) {}
   }
+}
+
+export function warning(cond: any, message: string): void {
+  log('warn', cond, message)
+}
+
+export function error(cond: any, message: string): void {
+  log('error', cond, message)
 }

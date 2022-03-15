@@ -4,7 +4,7 @@ import { createBrowserHistory, createHashHistory, History } from 'history'
 
 import { LocationProvider } from '../context/LocationContext'
 import { NavigationProvider } from '../context/NavigationContext'
-import { useMatch } from '../hooks/useMatch'
+import { useWatch } from '../hooks/useWatch'
 
 import { Route } from './route'
 import RouterPage from './RouterPage'
@@ -32,7 +32,7 @@ export const Router = ({ basename = '/', history, routes }: RouterProps) => {
     matches,
     location,
     history: proHistory
-  } = useMatch({ basename, history, routes })
+  } = useWatch({ basename, history, routes })
 
   const children = renderRoutes(matches)
 

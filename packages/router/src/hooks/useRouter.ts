@@ -44,5 +44,11 @@ export const useRouter = () => {
     }
   }
 
-  return ref.current as RouterNavigator
+  return {
+    ...(ref.current as RouterNavigator),
+    currentRoute: navigator.currentRoute,
+    getSnapshoot() {
+      return navigator.stackSnapshoot
+    }
+  }
 }

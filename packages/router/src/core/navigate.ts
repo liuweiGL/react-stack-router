@@ -1,7 +1,10 @@
 import { ProHistory } from '../core/history'
+import { error } from '../utils/diagnosis'
+
+import { isTabRoute } from './route'
 
 export type NavigateForwardOptions = {
-  type: 'navigateTo' | 'switchTab' | 'redirectTo'
+  type: 'navigateTo' | 'switchTab' | 'redirectTo' | 'reLaunch'
   name?: string
   url?: string
 }
@@ -27,6 +30,7 @@ export const navigate = async (options: NavigateOptions) => {
     try {
       if (type === 'navigateBack') {
         const { delta } = options
+
         navigator.back(delta)
       } else {
         const { name, url } = options
@@ -37,8 +41,19 @@ export const navigate = async (options: NavigateOptions) => {
         }
 
         if (type === 'navigateTo' || type === 'switchTab') {
-          navigator.push(to)
+          navigator.push(to, ({ route }) => {
+            if (type === 'navigateTo' && isTabRoute(route)) {
+              error(
+                true,
+                `Use \`switchTo\` instead of \`navigateTo\` to switch the tabbar page：${route.path}`
+              )
+
+              return false
+            }
+          })
         } else if (type === 'redirectTo') {
+          navigator.replace(to)
+        } else if (type === 'reLaunch') {
           navigator.reset()
           navigator.push(to)
         }

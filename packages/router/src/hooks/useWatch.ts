@@ -14,7 +14,7 @@ export type UseHistoryProps = {
   routes: Route[]
 }
 
-export const useMatch = ({ basename, history, routes }: UseHistoryProps) => {
+export const useWatch = ({ basename, history, routes }: UseHistoryProps) => {
   const stack = useStack()
 
   // 不要使用 useMemo 不然有可能导致多个 history 实例操作同一个 stack

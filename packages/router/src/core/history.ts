@@ -1,5 +1,6 @@
 import { createPath, History, parsePath, Path, To, Update } from 'history'
 
+import { isLazyComponent, loadLazyComponent } from '../utils/component'
 import { Noop } from '../utils/function'
 import {
   getPageKey,
@@ -9,8 +10,12 @@ import {
   stripBasename
 } from '../utils/url'
 
-import { isTabRoute, matchRoute, Route } from './route'
+import { isTabRoute, matchRoute, Route, RouteRecord } from './route'
 import { Stack } from './stack'
+
+type ProState = {
+  blockerId: number
+}
 
 export type ProTo =
   | To
@@ -19,10 +24,12 @@ export type ProTo =
     }
 
 export type ProUpdate = Update & {
-  route: Route
+  route: RouteRecord
 }
 
 export type ProListener = (options: ProUpdate) => void
+
+export type ProBlocker = (options: ProUpdate) => boolean | undefined
 
 export type HistoryProps = {
   basename: string
@@ -32,10 +39,14 @@ export type HistoryProps = {
 }
 
 export class ProHistory {
-  basename: string
+  public basename: string
   private history: History
   private routes: Route[]
   private stack: Stack
+
+  private routeRecordMap: Map<string, RouteRecord>
+  private blockerMap: Map<number, ProBlocker>
+
   private listeners: ProListener[] = []
   private unlisteners: Noop[] = []
 
@@ -44,6 +55,8 @@ export class ProHistory {
     this.routes = routes
     this.stack = stack
     this.history = history
+    this.routeRecordMap = new Map()
+    this.blockerMap = new Map()
 
     this.initSubscriber()
     this.initWatcher()
@@ -54,33 +67,97 @@ export class ProHistory {
     return this.history.location
   }
 
+  get currentRoute() {
+    return this.stack.current
+  }
+
+  get stackSnapshoot() {
+    return this.stack.items.slice()
+  }
+
   private get indexRoute() {
     return this.routes.find(item => item.index) || this.routes[0]
+  }
+
+  private async resolveRouteRecord(pathname: string) {
+    const route = matchRoute(this.routes, pathname)
+
+    if (!route) {
+      return
+    }
+
+    const { path, component } = route
+    if (this.routeRecordMap.has(path)) {
+      return this.routeRecordMap.get(path)
+    }
+
+    let routeRecord: RouteRecord
+
+    if (isLazyComponent(component)) {
+      const resolvedComponent = await loadLazyComponent(component)
+
+      if (!resolvedComponent) {
+        throw new Error(`Couldn't resolve component  at "${path}"`)
+      }
+
+      routeRecord = {
+        ...route,
+        component: resolvedComponent
+      }
+    } else {
+      routeRecord = {
+        ...route,
+        component
+      }
+    }
+
+    this.routeRecordMap.set(path, routeRecord)
+
+    return routeRecord
   }
 
   /**
    * 包装 history 的 listen 事件，处理 basename
    */
   private initSubscriber() {
-    const unlistener = this.history.listen(options => {
+    const unlistener = this.history.listen(async options => {
       const {
-        location: { pathname }
+        location: { pathname, state }
       } = options
+
       const path = stripBasename(this.basename, pathname)
+
       if (!path) {
         return
       }
-      const route = matchRoute(this.routes, path)
+
+      const route = await this.resolveRouteRecord(path)
+
       if (!route) {
         return
       }
+
+      const proOptions = {
+        ...options,
+        route
+      }
+
+      if (state) {
+        const { blockerId } = state as ProState
+
+        const blocker = this.blockerMap.get(blockerId)
+
+        if (blocker && blocker(proOptions) === false) {
+          this.blockerMap.delete(blockerId)
+          return
+        }
+      }
+
       this.listeners.forEach(listen => {
-        listen({
-          ...options,
-          route
-        })
+        listen(proOptions)
       })
     })
+
     this.unlisteners.push(unlistener)
   }
 
@@ -90,22 +167,21 @@ export class ProHistory {
   private initWatcher() {
     this.listen(({ route, location }) => {
       const url = createPath(location)
-      if (isTabRoute(route)) {
-        this.stack.switchTab({
-          url,
-          ...route
-        })
-        return
-      }
 
       const pageKey = getPageKey(location)
 
       if (pageKey) {
-        this.stack.jumpPage({
+        const stackRoute = {
           pageKey,
           url,
           ...route
-        })
+        }
+
+        if (isTabRoute(route)) {
+          this.stack.switchTab(stackRoute)
+        } else {
+          this.stack.jumpPage(stackRoute)
+        }
       } else {
         this.history.replace(setPageKey(location))
       }
@@ -154,30 +230,38 @@ export class ProHistory {
     return path
   }
 
-  push(to: ProTo) {
+  push(to: ProTo, blocker?: ProBlocker) {
     const result = this.resolveTo(to)
 
     if (result) {
-      this.history.push(result)
+      let state
+      if (blocker) {
+        const blockerId = Date.now()
+        state = { blockerId }
+        this.blockerMap.set(blockerId, blocker)
+      }
+
+      this.history.push(result, state)
     }
   }
 
-  replace(to: To) {
+  replace(to: ProTo) {
     const result = this.resolveTo(to)
 
     if (result) {
+      this.stack.pop()
       this.history.replace(result)
     }
+  }
+
+  reset() {
+    this.stack.clear()
   }
 
   back(delta = 1) {
     const prePage = this.stack.getLastItem(delta)
 
     this.history.replace(prePage.url)
-  }
-
-  reset() {
-    this.stack.clear()
   }
 
   createHref(to: ProTo) {

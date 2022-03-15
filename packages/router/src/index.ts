@@ -5,8 +5,6 @@ export {
   type HashRouterProps
 } from './core/Router'
 
-export { Navigator, type NavigatorProps } from './core/Navigator'
-
 export {
   type Route,
   isPageRoute,
@@ -15,5 +13,8 @@ export {
   matchRoute
 } from './core/route'
 
+export { Navigator, type NavigatorProps } from './core/Navigator'
+
 export { useRouter, type RouterNavigator } from './hooks/useRouter'
+
 export { useLocation } from './hooks/useLocation'
