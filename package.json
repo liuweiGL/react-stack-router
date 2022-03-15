@@ -6,6 +6,7 @@
     "fix": "eslint \"packages/**/*.ts?(x)\" --color --quiet --fix"
   },
   "devDependencies": {
+    "@types/node": "^17.0.21",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
     "eslint": "^8.10.0",
@@ -16,6 +17,7 @@
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "vite": "^2.8.6"
   }
 }
