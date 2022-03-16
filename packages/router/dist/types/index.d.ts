@@ -3,3 +3,5 @@ export { type Route, isPageRoute, isTabRoute, isSameRoute, matchRoute } from './
 export { Navigator, type NavigatorProps } from './core/Navigator';
 export { useRouter, type RouterNavigator } from './hooks/useRouter';
 export { useLocation } from './hooks/useLocation';
+export { useDidHide } from './hooks/useDidHide';
+export { useDidShow } from './hooks/useDidShow';

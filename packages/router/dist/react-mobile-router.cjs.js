@@ -461,11 +461,13 @@ const useWatch = ({ basename, history, routes }) => {
     };
 };
 
-const hideStyle = {
+const PageContext = react.createContext({});
+
+const hideStyle = Object.freeze({
     display: 'none'
-};
+});
 const RouterPage = ({ status, children }) => {
-    return (jsxRuntime.jsx("div", { children: children, style: status === 'hide' ? hideStyle : undefined }));
+    return (jsxRuntime.jsx(PageContext.Provider, { value: { status }, children: jsxRuntime.jsx("div", { children: children, style: status === 'hide' ? hideStyle : undefined }) }));
 };
 
 const renderRoutes = (routes) => {
@@ -539,11 +541,12 @@ const navigate = async (options) => {
 
 const Navigator = ({ className, style, children, title = children, onClick, ...navigateOptions }) => {
     const { navigator } = useNavigation();
+    let href;
     if (navigateOptions.type !== 'navigateBack') {
         const { name, url } = navigateOptions;
         const to = name ? { name } : url;
         if (to) {
-            navigator.createHref(to);
+            href = navigator.createHref(to);
         }
     }
     const handleNavigate = (event) => {
@@ -561,9 +564,7 @@ const Navigator = ({ className, style, children, title = children, onClick, ...n
             });
         }
     };
-    return (jsxRuntime.jsx("a", { className: className, 
-        // href={href}
-        style: style, target: '_self', onClick: handleNavigate, children: title }));
+    return (jsxRuntime.jsx("a", { className: className, href: href, style: style, target: '_self', onClick: handleNavigate, children: title }));
 };
 
 const useRouter = () => {
@@ -598,6 +599,28 @@ const useLocation = () => {
     return react.useContext(LocationContext);
 };
 
+const usePage = () => {
+    return react.useContext(PageContext);
+};
+
+const useDidHide = (cb) => {
+    const { status } = usePage();
+    const ref = react.useRef();
+    if (status === 'hide' && ref.current !== 'hide') {
+        cb();
+    }
+    ref.current = status;
+};
+
+const useDidShow = (cb) => {
+    const { status } = usePage();
+    const ref = react.useRef();
+    if (status === 'show' && ref.current !== 'show') {
+        cb();
+    }
+    ref.current = status;
+};
+
 exports.BrowserRouter = BrowserRouter;
 exports.HashRouter = HashRouter;
 exports.Navigator = Navigator;
@@ -605,6 +628,8 @@ exports.isPageRoute = isPageRoute;
 exports.isSameRoute = isSameRoute;
 exports.isTabRoute = isTabRoute;
 exports.matchRoute = matchRoute;
+exports.useDidHide = useDidHide;
+exports.useDidShow = useDidShow;
 exports.useLocation = useLocation;
 exports.useRouter = useRouter;
 //# sourceMappingURL=react-mobile-router.cjs.js.map
