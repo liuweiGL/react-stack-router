@@ -1,5 +1,5 @@
 {
-  "name": "react-mobile-router",
+  "name": "react-stack-router",
   "version": "1.0.0",
   "description": "react 手机端路由",
   "keywords": [
@@ -9,17 +9,17 @@
   ],
   "author": "liuweigl",
   "license": "MIT",
-  "repository": "https://github.com/liuweiGL/react-mobile-router",
+  "repository": "https://github.com/liuweiGL/react-stack-router",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "./dist/react-mobile-router.cjs.js",
-  "module": "./dist/react-mobile-router.es.js",
+  "main": "./dist/react-stack-router.cjs.js",
+  "module": "./dist/react-stack-router.es.js",
   "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/react-mobile-router.es.js",
-      "require": "./dist/react-mobile-router.cjs.js"
+      "import": "./dist/react-stack-router.es.js",
+      "require": "./dist/react-stack-router.cjs.js"
     }
   },
   "scripts": {

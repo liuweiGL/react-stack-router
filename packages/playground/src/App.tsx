@@ -1,4 +1,4 @@
-import { BrowserRouter, Route } from 'react-mobile-router'
+import { BrowserRouter, Route } from 'react-stack-router'
 
 import HomePage from './pages/Home'
 import ListPage from './pages/List'

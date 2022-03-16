@@ -34,12 +34,12 @@ export default defineConfig({
     {
       format: 'esm',
       sourcemap: true,
-      file: `${OUT_DIR}react-mobile-router.es.js`
+      file: `${OUT_DIR}react-stack-router.es.js`
     },
     {
       format: 'commonjs',
       sourcemap: true,
-      file: `${OUT_DIR}react-mobile-router.cjs.js`
+      file: `${OUT_DIR}react-stack-router.cjs.js`
     }
   ],
   external: ['history', 'react', 'react/jsx-runtime'],

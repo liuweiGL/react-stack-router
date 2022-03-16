@@ -1,4 +1,4 @@
-import { useRouter } from 'react-mobile-router'
+import { useRouter } from 'react-stack-router'
 
 import { useTraceMount } from '../hooks/useTraceMount'
 import { useTraceShow } from '../hooks/useTraceShow'

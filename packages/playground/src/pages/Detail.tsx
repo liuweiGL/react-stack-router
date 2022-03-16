@@ -1,4 +1,4 @@
-import { Navigator } from 'react-mobile-router'
+import { Navigator } from 'react-stack-router'
 
 import { useTraceMount } from '../hooks/useTraceMount'
 
