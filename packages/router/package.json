@@ -13,18 +13,27 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "./dist/react-mobile-router.js",
-  "module": "./dist/react-mobile-router.js",
+  "main": "./dist/react-mobile-router.cjs.js",
+  "module": "./dist/react-mobile-router.es.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/react-mobile-router.es.js",
+      "require": "./dist/react-mobile-router.cjs.js"
+    }
+  },
   "scripts": {
-    "build": "node build.js",
-    "build:watch": "node build.js --watch"
+    "build": "rollup -c rollup.config.js",
+    "build:watch": "rollup -c rollup.config.js --watch"
   },
   "dependencies": {
     "history": "^5.3.0"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.1",
     "@types/react": "^17.0.33",
-    "esbuild": "^0.14.27",
-    "esbuild-plugin-d.ts": "^1.1.0"
+    "rollup": "^2.70.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.6.2"
   }
 }

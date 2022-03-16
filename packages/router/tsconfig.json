@@ -17,5 +17,5 @@
     "emitDeclarationOnly": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"]
+  "include": ["src", "rollup.config.ts"]
 }
