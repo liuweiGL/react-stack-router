@@ -1,39 +1,7 @@
-var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
-var __publicField = (obj, key, value) => {
-  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-  return value;
-};
-import { createContext, useCallback, useState, useMemo, useEffect, useRef, useContext } from "react";
+// src/core/Router.tsx
+import { useMemo as useMemo2 } from "react";
+
+// ../../node_modules/.pnpm/@babel+runtime@7.17.7/node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
   _extends = Object.assign || function(target) {
     for (var i = 1; i < arguments.length; i++) {
@@ -48,15 +16,29 @@ function _extends() {
   };
   return _extends.apply(this, arguments);
 }
+
+// ../../node_modules/.pnpm/history@5.3.0/node_modules/history/index.js
 var Action;
 (function(Action2) {
   Action2["Pop"] = "POP";
   Action2["Push"] = "PUSH";
   Action2["Replace"] = "REPLACE";
 })(Action || (Action = {}));
-var readOnly = function(obj) {
+var readOnly = true ? function(obj) {
+  return Object.freeze(obj);
+} : function(obj) {
   return obj;
 };
+function warning(cond, message) {
+  if (!cond) {
+    if (typeof console !== "undefined")
+      console.warn(message);
+    try {
+      throw new Error(message);
+    } catch (e) {
+    }
+  }
+}
 var BeforeUnloadEventType = "beforeunload";
 var HashChangeEventType = "hashchange";
 var PopStateEventType = "popstate";
@@ -98,6 +80,8 @@ function createBrowserHistory(options) {
             };
             go(delta);
           }
+        } else {
+          true ? warning(false, "You are trying to block a POP navigation to a location that was not created by the history library. The block will fail silently in production, but in general you should do all navigation with the history library (instead of using window.history.pushState directly) to avoid this situation.") : void 0;
         }
       } else {
         applyTx(nextAction);
@@ -259,6 +243,8 @@ function createHashHistory(options) {
             };
             go(delta);
           }
+        } else {
+          true ? warning(false, "You are trying to block a POP navigation to a location that was not created by the history library. The block will fail silently in production, but in general you should do all navigation with the history library (instead of using window.history.pushState directly) to avoid this situation.") : void 0;
         }
       } else {
         applyTx(nextAction);
@@ -338,6 +324,7 @@ function createHashHistory(options) {
     function retry() {
       push(to, state);
     }
+    true ? warning(nextLocation.pathname.charAt(0) === "/", "Relative pathnames are not supported in hash history.push(" + JSON.stringify(to) + ")") : void 0;
     if (allowTx(nextAction, nextLocation, retry)) {
       var _getHistoryStateAndUr3 = getHistoryStateAndUrl(nextLocation, index + 1), historyState = _getHistoryStateAndUr3[0], url = _getHistoryStateAndUr3[1];
       try {
@@ -354,6 +341,7 @@ function createHashHistory(options) {
     function retry() {
       replace(to, state);
     }
+    true ? warning(nextLocation.pathname.charAt(0) === "/", "Relative pathnames are not supported in hash history.replace(" + JSON.stringify(to) + ")") : void 0;
     if (allowTx(nextAction, nextLocation, retry)) {
       var _getHistoryStateAndUr4 = getHistoryStateAndUrl(nextLocation, index), historyState = _getHistoryStateAndUr4[0], url = _getHistoryStateAndUr4[1];
       globalHistory.replaceState(historyState, "", url);
@@ -453,39 +441,58 @@ function parsePath(path) {
   }
   return parsedPath;
 }
-const LocationContext = createContext({});
-const LocationProvider = (props) => {
-  return /* @__PURE__ */ React.createElement(LocationContext.Provider, __spreadValues({}, props));
+
+// src/context/LocationContext.tsx
+import { createContext } from "react";
+var LocationContext = createContext({});
+var LocationProvider = (props) => {
+  return /* @__PURE__ */ React.createElement(LocationContext.Provider, {
+    ...props
+  });
 };
-const NavigationContext = createContext({});
-const NavigationProvider = (props) => {
-  return /* @__PURE__ */ React.createElement(NavigationContext.Provider, __spreadValues({}, props));
+
+// src/context/NavigationContext.tsx
+import { createContext as createContext2 } from "react";
+var NavigationContext = createContext2({});
+var NavigationProvider = (props) => {
+  return /* @__PURE__ */ React.createElement(NavigationContext.Provider, {
+    ...props
+  });
 };
-const isClassComponent = (component) => {
-  var _a;
-  return !!((_a = Object.getPrototypeOf(component)) == null ? void 0 : _a.isReactComponent);
+
+// src/hooks/useWatch.ts
+import { useEffect as useEffect2, useRef, useState as useState2 } from "react";
+
+// src/utils/component.ts
+var isClassComponent = (component) => {
+  return !!Object.getPrototypeOf(component)?.isReactComponent;
 };
-const importRegexp = /import\s?\(/;
-const isLazyComponent = (component) => {
+var importRegexp = /import\s?\(/;
+var isLazyComponent = (component) => {
   if (isClassComponent(component)) {
     return false;
   }
   const str = String(component).trim();
   return str.startsWith("(") && str.includes("=>") && importRegexp.test(str);
 };
-const loadLazyComponent = async (component) => {
+var loadLazyComponent = async (component) => {
   const res = await component();
   if (res && isESModule(res)) {
     return res.default;
   }
   return res;
 };
-const isESModule = (obj) => {
+var isESModule = (obj) => {
   return obj.__esModule || hasSymbol && obj[Symbol.toStringTag] === "Module";
 };
-const hasSymbol = typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol";
-const PAGE_KEY = "_pageKey";
-let IDX = 36, HEX = "";
+var hasSymbol = typeof Symbol === "function" && typeof Symbol.toStringTag === "symbol";
+
+// src/utils/constants.ts
+var PAGE_KEY = "_pageKey";
+
+// src/utils/uid.ts
+var IDX = 36;
+var HEX = "";
 while (IDX--)
   HEX += IDX.toString(36);
 function uid(len) {
@@ -494,10 +501,12 @@ function uid(len) {
     str += HEX[Math.random() * 36 | 0];
   return str;
 }
-const containBasename = (basename, pathname) => {
+
+// src/utils/url.ts
+var containBasename = (basename, pathname) => {
   return pathname.toLowerCase().startsWith(basename.toLowerCase());
 };
-const stripBasename = (basename, pathname) => {
+var stripBasename = (basename, pathname) => {
   if (basename === "/")
     return pathname;
   if (!containBasename(basename, pathname)) {
@@ -505,13 +514,13 @@ const stripBasename = (basename, pathname) => {
   }
   return pathname.slice(basename.length) || "/";
 };
-const joinPaths = (...paths) => {
+var joinPaths = (...paths) => {
   return paths.join("/").replace(/\/\/+/g, "/");
 };
-const normalizePath = (pathname) => {
+var normalizePath = (pathname) => {
   return pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
 };
-const parseParams = (url) => {
+var parseParams = (url) => {
   const result = {};
   if (!url) {
     return result;
@@ -523,14 +532,14 @@ const parseParams = (url) => {
   }
   return result;
 };
-const stringifyParams = (params) => {
+var stringifyParams = (params) => {
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
     searchParams.append(key, value);
   }
   return searchParams.toString();
 };
-const getPageKey = ({ search }) => {
+var getPageKey = ({ search }) => {
   if (!search) {
     return void 0;
   }
@@ -538,15 +547,19 @@ const getPageKey = ({ search }) => {
   const pageKey = params[PAGE_KEY];
   return typeof pageKey === "string" ? pageKey : void 0;
 };
-const setPageKey = (location) => {
+var setPageKey = (location) => {
   const params = parseParams(location.search);
-  const search = stringifyParams(__spreadProps(__spreadValues({}, params), {
+  const search = stringifyParams({
+    ...params,
     [PAGE_KEY]: uid()
-  }));
-  return __spreadProps(__spreadValues({}, location), {
-    search
   });
+  return {
+    ...location,
+    search
+  };
 };
+
+// src/utils/diagnosis.ts
 function log(method, cond, message) {
   if (cond) {
     if (typeof console !== "undefined")
@@ -557,39 +570,43 @@ function log(method, cond, message) {
     }
   }
 }
-function warning(cond, message) {
+function warning2(cond, message) {
   log("warn", cond, message);
 }
 function error(cond, message) {
   log("error", cond, message);
 }
-const isTabRoute = (route) => {
+
+// src/core/route.ts
+var isTabRoute = (route) => {
   return route.type === "tab";
 };
-const isPageRoute = (route) => {
+var isPageRoute = (route) => {
   return route.type === void 0 || route.type === "page";
 };
-const isSameRoute = (route1, route2) => {
+var isSameRoute = (route1, route2) => {
   return route1.name === route2.name || route1.path === route2.path;
 };
-const matchRoute = (routes, nameOrPath) => {
+var matchRoute = (routes, nameOrPath) => {
   let route;
   if (nameOrPath) {
     route = routes.find(({ name, path }) => name === nameOrPath || path === nameOrPath);
   }
-  warning(!route, `Can not find the route when name or path is  \`${nameOrPath}\` `);
+  warning2(!route, `Can not find the route when name or path is  \`${nameOrPath}\` `);
   return route;
 };
-class ProHistory {
+
+// src/core/history.ts
+var ProHistory = class {
+  basename;
+  history;
+  routes;
+  stack;
+  routeRecordMap;
+  blockerMap;
+  listeners = [];
+  unlisteners = [];
   constructor({ basename, history, routes, stack }) {
-    __publicField(this, "basename");
-    __publicField(this, "history");
-    __publicField(this, "routes");
-    __publicField(this, "stack");
-    __publicField(this, "routeRecordMap");
-    __publicField(this, "blockerMap");
-    __publicField(this, "listeners", []);
-    __publicField(this, "unlisteners", []);
     this.basename = normalizePath(basename);
     this.routes = routes;
     this.stack = stack;
@@ -627,13 +644,15 @@ class ProHistory {
       if (!resolvedComponent) {
         throw new Error(`Couldn't resolve component  at "${path}"`);
       }
-      routeRecord = __spreadProps(__spreadValues({}, route), {
+      routeRecord = {
+        ...route,
         component: resolvedComponent
-      });
+      };
     } else {
-      routeRecord = __spreadProps(__spreadValues({}, route), {
+      routeRecord = {
+        ...route,
         component
-      });
+      };
     }
     this.routeRecordMap.set(path, routeRecord);
     return routeRecord;
@@ -651,9 +670,10 @@ class ProHistory {
       if (!route) {
         return;
       }
-      const proOptions = __spreadProps(__spreadValues({}, options), {
+      const proOptions = {
+        ...options,
         route
-      });
+      };
       if (state) {
         const { blockerId } = state;
         const blocker = this.blockerMap.get(blockerId);
@@ -673,10 +693,11 @@ class ProHistory {
       const url = createPath(location);
       const pageKey = getPageKey(location);
       if (pageKey) {
-        const stackRoute = __spreadValues({
+        const stackRoute = {
           pageKey,
-          url
-        }, route);
+          url,
+          ...route
+        };
         if (isTabRoute(route)) {
           this.stack.switchTab(stackRoute);
         } else {
@@ -709,7 +730,7 @@ class ProHistory {
         pathname: route.path
       } : void 0;
     }
-    if (path == null ? void 0 : path.pathname) {
+    if (path?.pathname) {
       path.pathname = joinPaths(this.basename, path.pathname);
       path = setPageKey(path);
     }
@@ -751,15 +772,22 @@ class ProHistory {
   destroy() {
     this.unlisteners.forEach((item) => item());
   }
-}
-let timer;
-const debounce = (fn, wait) => {
+};
+
+// src/hooks/useStack.ts
+import { useMemo } from "react";
+
+// src/utils/function.ts
+var timer;
+var debounce = (fn, wait) => {
   if (timer) {
     clearTimeout(timer);
   }
   timer = setTimeout(fn, wait);
 };
-const createReactiveArray = (scheduler) => {
+
+// src/core/stack.ts
+var createReactiveArray = (scheduler) => {
   const initial = [];
   return new Proxy(initial, {
     get(target, key) {
@@ -772,10 +800,10 @@ const createReactiveArray = (scheduler) => {
     }
   });
 };
-class Stack {
+var Stack = class {
+  tabs;
+  pages;
   constructor(scheduler) {
-    __publicField(this, "tabs");
-    __publicField(this, "pages");
     this.tabs = createReactiveArray(scheduler);
     this.pages = createReactiveArray(scheduler);
   }
@@ -801,7 +829,7 @@ class Stack {
     if (this.containsTab(item)) {
       this.tabs.sort((tab) => isSameRoute(tab, item) ? -1 : 0);
     } else {
-      this.tabs.push(__spreadValues({}, item));
+      this.tabs.push({ ...item });
     }
     this.clear();
   }
@@ -810,7 +838,7 @@ class Stack {
     if (pageIndex > -1) {
       this.pages.splice(pageIndex + 1, this.pages.length - pageIndex - 1);
     } else {
-      this.pages.push(__spreadValues({}, item));
+      this.pages.push({ ...item });
     }
   }
   pop() {
@@ -819,29 +847,39 @@ class Stack {
   clear() {
     this.pages.splice(0, this.pages.length);
   }
-}
-const useForceUpdate = () => {
+};
+
+// src/hooks/useForceUpdate.ts
+import { useCallback, useState } from "react";
+var useForceUpdate = () => {
   const [, setState] = useState({});
   return useCallback(() => setState({}), []);
 };
-const useStack = () => {
+
+// src/hooks/useStack.ts
+var useStack = () => {
   const scheduler = useForceUpdate();
   return useMemo(() => new Stack(scheduler), []);
 };
-const useUnmount = (cb) => {
+
+// src/hooks/useUnmount.ts
+import { useEffect } from "react";
+var useUnmount = (cb) => {
   useEffect(() => {
     return cb;
   }, []);
 };
-const useWatch = ({ basename, history, routes }) => {
+
+// src/hooks/useWatch.ts
+var useWatch = ({ basename, history, routes }) => {
   const stack = useStack();
   const ref = useRef();
   if (!ref.current) {
     ref.current = new ProHistory({ basename, history, routes, stack });
   }
   const proHistory = ref.current;
-  const [location, setLocation] = useState(history.location);
-  useEffect(() => {
+  const [location, setLocation] = useState2(history.location);
+  useEffect2(() => {
     proHistory.listen(function c({ location: location2 }) {
       setLocation(location2);
     });
@@ -855,25 +893,30 @@ const useWatch = ({ basename, history, routes }) => {
     matches: stack.items
   };
 };
-const hideStyle = {
+
+// src/core/RouterPage.tsx
+var hideStyle = {
   display: "none"
 };
-const RouterPage = ({ status, children }) => {
+var RouterPage = ({ status, children }) => {
   return /* @__PURE__ */ React.createElement("div", {
     children,
     style: status === "hide" ? hideStyle : void 0
   });
 };
-const renderRoutes = (routes) => {
+var RouterPage_default = RouterPage;
+
+// src/core/Router.tsx
+var renderRoutes = (routes) => {
   return routes.map(({ pageKey, component: RouteComponent }, index) => {
     const status = index === routes.length - 1 ? "show" : "hide";
-    return /* @__PURE__ */ React.createElement(RouterPage, {
+    return /* @__PURE__ */ React.createElement(RouterPage_default, {
       key: pageKey,
       status
     }, /* @__PURE__ */ React.createElement(RouteComponent, null));
   });
 };
-const Router = ({ basename = "/", history, routes }) => {
+var Router = ({ basename = "/", history, routes }) => {
   const {
     matches,
     location,
@@ -887,29 +930,36 @@ const Router = ({ basename = "/", history, routes }) => {
     value: { location }
   }));
 };
-const BrowserRouter = ({ basename, routes }) => {
-  const history = useMemo(() => createBrowserHistory({ window }), []);
+var BrowserRouter = ({ basename, routes }) => {
+  const history = useMemo2(() => createBrowserHistory({ window }), []);
   return /* @__PURE__ */ React.createElement(Router, {
     basename,
     history,
     routes
   });
 };
-const HashRouter = ({ basename, routes }) => {
-  const history = useMemo(() => createHashHistory({ window }), []);
+var HashRouter = ({ basename, routes }) => {
+  const history = useMemo2(() => createHashHistory({ window }), []);
   return /* @__PURE__ */ React.createElement(Router, {
     basename,
     history,
     routes
   });
 };
-const useNavigation = () => {
+
+// src/hooks/useNavigation.ts
+import { useContext } from "react";
+var useNavigation = () => {
   return useContext(NavigationContext);
 };
-const isModifiedEvent = (event) => {
+
+// src/utils/event.ts
+var isModifiedEvent = (event) => {
   return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
 };
-const navigate = async (options) => {
+
+// src/core/navigate.ts
+var navigate = async (options) => {
   return new Promise((resolve, reject) => {
     const { navigator, type } = options;
     const unListen = navigator.listen(() => {
@@ -945,40 +995,38 @@ const navigate = async (options) => {
     }
   });
 };
-const Navigator = (_a) => {
-  var _b = _a, {
-    className,
-    style,
-    children,
-    title = children,
-    onClick
-  } = _b, navigateOptions = __objRest(_b, [
-    "className",
-    "style",
-    "children",
-    "title",
-    "onClick"
-  ]);
+
+// src/core/Navigator.tsx
+var Navigator = ({
+  className,
+  style,
+  children,
+  title = children,
+  onClick,
+  ...navigateOptions
+}) => {
   const { navigator } = useNavigation();
+  let href;
   if (navigateOptions.type !== "navigateBack") {
     const { name, url } = navigateOptions;
     const to = name ? { name } : url;
     if (to) {
-      navigator.createHref(to);
+      href = navigator.createHref(to);
     }
   }
   const handleNavigate = (event) => {
-    const keepGoing = onClick == null ? void 0 : onClick(event);
+    const keepGoing = onClick?.(event);
     if (keepGoing === false) {
       event.preventDefault();
       return;
     }
     if (event.button === 0 && !isModifiedEvent(event)) {
       event.preventDefault();
-      navigate(__spreadValues({
+      navigate({
         navigator,
-        type: "navigateTo"
-      }, navigateOptions));
+        type: "navigateTo",
+        ...navigateOptions
+      });
     }
   };
   return /* @__PURE__ */ React.createElement("a", {
@@ -988,34 +1036,51 @@ const Navigator = (_a) => {
     onClick: handleNavigate
   }, title);
 };
-const useRouter = () => {
-  const ref = useRef();
+
+// src/hooks/useRouter.ts
+import { useRef as useRef2 } from "react";
+var useRouter = () => {
+  const ref = useRef2();
   const { navigator } = useNavigation();
   if (!ref.current) {
     ref.current = {
       navigateTo: (options) => {
-        return navigate(__spreadValues({ navigator, type: "navigateTo" }, options));
+        return navigate({ navigator, type: "navigateTo", ...options });
       },
       redirectTo: (options) => {
-        return navigate(__spreadValues({ navigator, type: "redirectTo" }, options));
+        return navigate({ navigator, type: "redirectTo", ...options });
       },
       switchTab: (options) => {
-        return navigate(__spreadValues({ navigator, type: "switchTab" }, options));
+        return navigate({ navigator, type: "switchTab", ...options });
       },
       navigateBack: (options) => {
-        return navigate(__spreadValues({ navigator, type: "navigateBack" }, options));
+        return navigate({ navigator, type: "navigateBack", ...options });
       }
     };
   }
-  return __spreadProps(__spreadValues({}, ref.current), {
+  return {
+    ...ref.current,
     currentRoute: navigator.currentRoute,
     getSnapshoot() {
       return navigator.stackSnapshoot;
     }
-  });
+  };
 };
-const useLocation = () => {
-  return useContext(LocationContext);
+
+// src/hooks/useLocation.ts
+import { useContext as useContext2 } from "react";
+var useLocation = () => {
+  return useContext2(LocationContext);
 };
-export { BrowserRouter, HashRouter, Navigator, isPageRoute, isSameRoute, isTabRoute, matchRoute, useLocation, useRouter };
-//# sourceMappingURL=react-mobile-router.es.js.map
+export {
+  BrowserRouter,
+  HashRouter,
+  Navigator,
+  isPageRoute,
+  isSameRoute,
+  isTabRoute,
+  matchRoute,
+  useLocation,
+  useRouter
+};
+//# sourceMappingURL=react-mobile-router.js.map
