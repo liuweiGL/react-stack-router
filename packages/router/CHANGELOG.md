@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/liuweiGL/react-stack-router/compare/v1.0.0...v1.0.1) (2022-03-16)
+
+
+### Bug Fixes
+
+* fix the dist files not exist in npm tarball ([c4c83c8](https://github.com/liuweiGL/react-stack-router/commit/c4c83c8f5900a17376431ac19d3d865ff27300e1))
+
 # 1.0.0 (2022-03-16)
 
 
