@@ -6,7 +6,6 @@ import RedirectPage from './pages/Redirect'
 
 const routes: Route[] = [
   {
-    type: 'tab',
     name: 'home',
     path: '/',
     component: HomePage,

@@ -1,9 +1,9 @@
 import { Navigator } from 'react-mobile-router'
 
-import { useTracker } from '../hooks/useTracker'
+import { useTraceMount } from '../hooks/useTraceMount'
 
 const DetailPage = () => {
-  useTracker('DetailPage')
+  useTraceMount('DetailPage')
 
   return (
     <div>
@@ -19,10 +19,10 @@ const DetailPage = () => {
       </article>
       <br />
       <br />
-      <Navigator title='重新进入首页' type='navigateTo' url='/' />
+      <Navigator title='重新进入首页' type='reLaunch' url='/' />
       <br />
       <br />
-      <Navigator name='redirect' title='进入重定向页面' type='navigateTo' />
+      <Navigator name='redirect' title='进入下一页' type='navigateTo' />
     </div>
   )
 }

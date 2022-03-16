@@ -4,7 +4,7 @@ import { useUnmount } from './useUnmount'
 
 const IndexMap = new Map()
 
-export const useTracker = (id: string) => {
+export const useTraceMount = (id: string) => {
   if (!IndexMap.has(id)) {
     IndexMap.set(id, 0)
   }
@@ -13,14 +13,14 @@ export const useTracker = (id: string) => {
     IndexMap.set(id, IndexMap.get(id) + 1)
     console.log(
       `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 加载 ~~~~~~~~~~~~~~`,
-      'color: green'
+      'color: #1890ff'
     )
   })
 
   useUnmount(() => {
     console.log(
       `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 卸载 ~~~~~~~~~~~~~~`,
-      'color: red'
+      'color: #f5222d'
     )
     IndexMap.set(id, IndexMap.get(id) - 1)
   })

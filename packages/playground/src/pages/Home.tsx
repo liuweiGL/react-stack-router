@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { Navigator } from 'react-mobile-router'
 
-import { useTracker } from '../hooks/useTracker'
+import { useTraceMount } from '../hooks/useTraceMount'
+import { useTraceShow } from '../hooks/useTraceShow'
 
 const HomePage = () => {
-  useTracker('Home')
-
+  useTraceMount('Home')
+  useTraceShow('Home')
   const [state, setState] = useState(2222222)
 
   return (

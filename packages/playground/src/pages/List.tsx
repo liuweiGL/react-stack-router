@@ -1,10 +1,11 @@
 import { useRouter } from 'react-mobile-router'
 
-import { useTracker } from '../hooks/useTracker'
+import { useTraceMount } from '../hooks/useTraceMount'
+import { useTraceShow } from '../hooks/useTraceShow'
 
 const ListPage = () => {
-  useTracker('ListPage')
-
+  useTraceMount('ListPage')
+  useTraceShow('ListPage')
   const { navigateTo } = useRouter()
 
   return (
@@ -24,7 +25,7 @@ const ListPage = () => {
                 navigateTo({ name: 'detail' })
               }}
             >
-              {index}
+              {index} 点击进入详情页
             </li>
           )
         })}

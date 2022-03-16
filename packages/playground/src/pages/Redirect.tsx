@@ -1,9 +1,9 @@
 import { Navigator } from 'react-mobile-router'
 
-import { useTracker } from '../hooks/useTracker'
+import { useTraceMount } from '../hooks/useTraceMount'
 
 const RedirectPage = () => {
-  useTracker('RedirectPage')
+  useTraceMount('RedirectPage')
 
   return (
     <div>
