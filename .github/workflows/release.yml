@@ -5,7 +5,6 @@ on:
       - main
 env:
   CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
 jobs:
   release:
     timeout-minutes: 15
@@ -14,8 +13,10 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: '16.x'
+          node-version: '17.x'
       - name: Install dependencies
+        env:
+          PNPM_CACHE_FOLDER: .pnpm-store
         run: |
           npm i pnpm@latest -g
           pnpm config set store-dir $PNPM_CACHE_FOLDER
@@ -24,4 +25,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: pnpm semantic-release --filter react-mobile-router
+        run: |
+          pnpm release --filter react-mobile-router
