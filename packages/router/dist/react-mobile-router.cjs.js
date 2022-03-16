@@ -621,9 +621,12 @@ const useDidShow = (cb) => {
     ref.current = status;
 };
 
+const defineRoutes = (routes) => routes;
+
 exports.BrowserRouter = BrowserRouter;
 exports.HashRouter = HashRouter;
 exports.Navigator = Navigator;
+exports.defineRoutes = defineRoutes;
 exports.isPageRoute = isPageRoute;
 exports.isSameRoute = isSameRoute;
 exports.isTabRoute = isTabRoute;

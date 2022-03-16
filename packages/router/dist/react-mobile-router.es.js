@@ -617,5 +617,7 @@ const useDidShow = (cb) => {
     ref.current = status;
 };
 
-export { BrowserRouter, HashRouter, Navigator, isPageRoute, isSameRoute, isTabRoute, matchRoute, useDidHide, useDidShow, useLocation, useRouter };
+const defineRoutes = (routes) => routes;
+
+export { BrowserRouter, HashRouter, Navigator, defineRoutes, isPageRoute, isSameRoute, isTabRoute, matchRoute, useDidHide, useDidShow, useLocation, useRouter };
 //# sourceMappingURL=react-mobile-router.es.js.map
