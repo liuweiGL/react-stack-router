@@ -3,22 +3,25 @@ const path = require('path')
 const { defineConfig } = require('rollup')
 const typescript = require('@rollup/plugin-typescript')
 
+// 构建输出目录
+const OUT_DIR = 'dist/'
+
 // 防止 watch 模式下重复清空
 let cleanable = true
+
 /**
  * 清空构建目录
  *
- * @param {string} dir
  * @returns  @type {import('rollup').Plugin}
  */
-const clean = dir => {
+const clean = () => {
   return {
     name: 'clean',
-    buildStart(options) {
-      const dirpath = path.resolve(__dirname, dir)
-      if (cleanable && fs.existsSync(dirpath)) {
+    buildStart() {
+      const distPath = path.resolve(__dirname, OUT_DIR)
+      if (cleanable && fs.existsSync(distPath)) {
         cleanable = false
-        fs.rmSync(dirpath, {
+        fs.rmSync(distPath, {
           recursive: true
         })
       }
@@ -26,7 +29,22 @@ const clean = dir => {
   }
 }
 
-const OUT_DIR = 'dist/'
+/**
+ * 从上级目录复制一些共用的文件
+ *
+ * @returns  @type {import('rollup').Plugin}
+ */
+const copy = () => {
+  return {
+    name: 'copy',
+    buildStart() {
+      fs.copyFileSync(
+        path.resolve(__dirname, '../..', 'README.md'),
+        path.resolve(__dirname, 'README.md')
+      )
+    }
+  }
+}
 
 export default defineConfig({
   input: 'src/index.ts',
@@ -44,7 +62,8 @@ export default defineConfig({
   ],
   external: ['history', 'react', 'react/jsx-runtime'],
   plugins: [
-    clean(OUT_DIR),
+    clean(),
+    copy({}),
     typescript({
       tsconfig: './tsconfig.json',
       compilerOptions: {
