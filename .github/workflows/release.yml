@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '16.x'
-      - name: install dependencies
+      - name: Install dependencies
         run: |
           npm i pnpm@latest -g
           pnpm config set store-dir $PNPM_CACHE_FOLDER
