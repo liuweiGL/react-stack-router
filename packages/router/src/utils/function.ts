@@ -1,4 +1,4 @@
-export type Noop = (...args: any[]) => any
+export type Noop<T = any> = (...args: T[]) => any
 
 let timer: any
 export const debounce = (fn: Noop, wait: number) => {

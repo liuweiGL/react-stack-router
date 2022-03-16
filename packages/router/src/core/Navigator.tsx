@@ -1,9 +1,13 @@
-import { CSSProperties, MouseEvent, MouseEventHandler, ReactNode } from 'react'
+import { CSSProperties, MouseEvent, ReactNode } from 'react'
 
 import { useNavigation } from '../hooks/useNavigation'
 import { isModifiedEvent } from '../utils/event'
 
-import { navigate } from './navigate'
+import {
+  navigate,
+  NavigateBackOptions,
+  NavigateForwardOptions
+} from './navigate'
 
 type ComponentProps = {
   className?: string
@@ -13,19 +17,8 @@ type ComponentProps = {
   onClick?: (event: MouseEvent) => boolean | void
 }
 
-export type NavigateForwardProps = {
-  type?: 'navigateTo' | 'switchTab' | 'redirectTo'
-  name?: string
-  url?: string
-}
-
-export type NavigateBackProps = {
-  type: 'navigateBack'
-  delta?: number
-}
-
 export type NavigatorProps = ComponentProps &
-  (NavigateForwardProps | NavigateBackProps)
+  (Partial<NavigateForwardOptions> | NavigateBackOptions)
 
 export const Navigator = ({
   className,
@@ -69,7 +62,7 @@ export const Navigator = ({
   return (
     <a
       className={className}
-      // href={href}
+      href={href}
       style={style}
       target='_self'
       onClick={handleNavigate}
