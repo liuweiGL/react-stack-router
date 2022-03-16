@@ -1,3 +1,5 @@
+import { Route } from './core/route'
+
 export {
   BrowserRouter,
   HashRouter,
@@ -17,3 +19,5 @@ export { useRouter, type RouterNavigator } from './hooks/useRouter'
 export { useLocation } from './hooks/useLocation'
 export { useDidHide } from './hooks/useDidHide'
 export { useDidShow } from './hooks/useDidShow'
+
+export const defineRoutes = (routes: Route[]) => routes
