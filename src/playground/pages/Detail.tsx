@@ -1,8 +1,10 @@
-import { Navigator } from '../../router'
+import { Navigator, useParams } from '../../router'
 import { useTraceMount } from '../hooks/useTraceMount'
 
 const DetailPage = () => {
   useTraceMount('DetailPage')
+
+  const params = useParams()
 
   return (
     <div>
@@ -20,6 +22,10 @@ const DetailPage = () => {
       <br />
       <Navigator title='重新进入首页' type='reLaunch' url='/' />
       <br />
+      <pre>
+        params:
+        {JSON.stringify(params, null, 2)}
+      </pre>
       <br />
       <Navigator name='redirect' title='进入下一页' type='navigateTo' />
     </div>
