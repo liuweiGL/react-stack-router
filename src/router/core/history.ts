@@ -197,7 +197,11 @@ export class ProHistory {
    * 如果当前路径根 basename 不匹配时，默认加载首页
    */
   private loadIndexPage() {
-    this.replace(this.indexRoute.path)
+    if (this.containBasename(this.location.pathname)) {
+      this.replace(this.location)
+    } else {
+      this.replace(this.indexRoute.path)
+    }
   }
 
   listen(listener: ProListener) {
