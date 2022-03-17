@@ -16,7 +16,7 @@ jobs:
           node-version: '17.x'
       - name: Install dependencies
         env:
-          PNPM_CACHE_FOLDER: .pnpm-store
+          PNPM_CACHE_FOLDER: ~/.pnpm-store
         run: |
           npm i pnpm@latest -g
           pnpm config set store-dir $PNPM_CACHE_FOLDER
