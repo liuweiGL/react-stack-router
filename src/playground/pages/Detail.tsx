@@ -1,5 +1,4 @@
-import { Navigator } from 'react-stack-router'
-
+import { Navigator } from '../../router'
 import { useTraceMount } from '../hooks/useTraceMount'
 
 const DetailPage = () => {

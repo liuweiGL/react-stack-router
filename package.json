@@ -1,14 +1,46 @@
 {
-  "name": "root",
-  "private": true,
+  "name": "react-stack-router",
+  "version": "1.0.0",
+  "description": "react 手机端路由",
+  "keywords": [
+    "react-router",
+    "mobile-router",
+    "stack-router"
+  ],
   "author": "liuweigl",
+  "license": "MIT",
+  "repository": "https://github.com/liuweiGL/react-stack-router",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "./dist/react-stack-router.umd.js",
+  "module": "./dist/react-stack-router.es.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/react-stack-router.es.js",
+      "require": "./dist/react-stack-router.umd.js"
+    }
+  },
   "scripts": {
-    "fix": "eslint \"packages/**/*.ts?(x)\" --color --quiet --fix"
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "lint": "tsc -p tsconfig.build.json --noEmit && eslint \"router/**/*.ts?(x)\" --color --quiet --fix",
+    "release": "semantic-release",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "history": "^5.3.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.1",
+    "@semantic-release/git": "^10.0.1",
     "@types/node": "^17.0.21",
+    "@types/react": "^17.0.40",
+    "@types/react-dom": "^17.0.13",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
+    "@vitejs/plugin-react": "^1.2.0",
     "eslint": "^8.10.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.25.4",
@@ -17,6 +49,10 @@
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "latest",
-    "typescript": "latest"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "semantic-release": "^19.0.2",
+    "typescript": "latest",
+    "vite": "^2.8.6"
   }
 }
