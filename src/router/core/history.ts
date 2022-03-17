@@ -3,6 +3,7 @@ import { createPath, History, parsePath, Path, To, Update } from 'history'
 import { isLazyComponent, loadLazyComponent } from '../utils/component'
 import { Noop } from '../utils/function'
 import {
+  containBasename,
   getPageKey,
   joinPaths,
   normalizePath,
@@ -77,6 +78,10 @@ export class ProHistory {
 
   private get indexRoute() {
     return this.routes.find(item => item.index) || this.routes[0]
+  }
+
+  private containBasename(pathname: string) {
+    return containBasename(this.basename, pathname)
   }
 
   private async resolveRouteRecord(pathname: string) {
@@ -189,7 +194,7 @@ export class ProHistory {
   }
 
   /**
-   * 加载首页
+   * 如果当前路径根 basename 不匹配时，默认加载首页
    */
   private loadIndexPage() {
     this.replace(this.indexRoute.path)
@@ -211,7 +216,7 @@ export class ProHistory {
     if (typeof to === 'string') {
       path = parsePath(to)
     } else if ('pathname' in to) {
-      path = to
+      path = Object.assign({}, to)
     } else if ('name' in to) {
       const route = matchRoute(this.routes, to.name)
 
@@ -223,7 +228,9 @@ export class ProHistory {
     }
 
     if (path?.pathname) {
-      path.pathname = joinPaths(this.basename, path.pathname)
+      if (!this.containBasename(path.pathname)) {
+        path.pathname = joinPaths(this.basename, path.pathname)
+      }
       path = setPageKey(path)
     }
 
