@@ -17,6 +17,7 @@ export { Navigator, type NavigatorProps } from './core/Navigator'
 
 export { useRouter, type RouterNavigator } from './hooks/useRouter'
 export { useLocation } from './hooks/useLocation'
+export { useParams } from './hooks/useParams'
 export { useDidHide } from './hooks/useDidHide'
 export { useDidShow } from './hooks/useDidShow'
 
