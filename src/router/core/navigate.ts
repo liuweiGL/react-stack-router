@@ -1,4 +1,4 @@
-import { ProHistory } from '../core/history'
+import { ProHistory, ProTo } from '../core/history'
 import { error } from '../utils/diagnosis'
 
 import { isTabRoute } from './route'
@@ -7,6 +7,7 @@ export type NavigateForwardOptions = {
   type: 'navigateTo' | 'switchTab' | 'redirectTo' | 'reLaunch'
   name?: string
   url?: string
+  params?: Record<any, any>
 }
 
 export type NavigateBackOptions = {
@@ -33,8 +34,14 @@ export const navigate = async (options: NavigateOptions) => {
 
         navigator.back(delta)
       } else {
-        const { name, url } = options
-        const to = name ? { name } : url
+        const { name, url, params } = options
+        let to: ProTo | undefined
+
+        if (name) {
+          to = { name, params }
+        } else if (url) {
+          to = { url, params }
+        }
 
         if (!to) {
           return

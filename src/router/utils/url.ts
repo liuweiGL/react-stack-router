@@ -52,6 +52,14 @@ export const stringifyParams = (params: Record<any, any>) => {
   return searchParams.toString()
 }
 
+export const createSearch = (params?: Record<any, any>) => {
+  if (!params) {
+    return undefined
+  }
+
+  return `?${stringifyParams(params)}`
+}
+
 export const getPageKey = ({ search }: Partial<Path>) => {
   if (!search) {
     return undefined
