@@ -40,7 +40,9 @@ const HomePage = () => {
       <button onClick={() => setState(11111111)}>设置状态</button>
       <br />
       <br />
-      <Navigator name='list'>前往列表页</Navigator>
+      <Navigator name='list' params={{ test: 'aaa' }}>
+        前往列表页
+      </Navigator>
     </div>
   )
 }
