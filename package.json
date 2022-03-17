@@ -13,6 +13,10 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "main": "./dist/react-stack-router.umd.js",
   "module": "./dist/react-stack-router.es.js",
   "types": "./dist/types/index.d.ts",
