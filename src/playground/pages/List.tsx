@@ -21,7 +21,10 @@ const ListPage = () => {
                 borderBottom: '1px solid #eee'
               }}
               onClick={() => {
-                navigateTo({ url: '/detail?a=1&b=2' })
+                navigateTo({
+                  url: '/detail?a=1&b=2',
+                  params: { c: 3, d: 'false' }
+                })
               }}
             >
               {index} 点击进入详情页
