@@ -1,5 +1,3 @@
-import { debounce } from '../utils/function'
-
 import { isSameRoute, RouteRecord } from './route'
 
 type Scheduler = () => void
@@ -21,7 +19,9 @@ const createReactiveArray = (scheduler: Scheduler) => {
     set(target, key: any, value) {
       target[key] = value
 
-      debounce(scheduler, 50)
+      if (key !== 'length') {
+        scheduler()
+      }
 
       return true
     }

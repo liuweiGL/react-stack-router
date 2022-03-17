@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { History } from 'history'
 
@@ -22,17 +22,15 @@ export const useWatch = ({ basename, history, routes }: UseHistoryProps) => {
 
   if (!ref.current) {
     ref.current = new ProHistory({ basename, history, routes, stack })
+
+    ref.current.listen(({ location }) => {
+      setLocation(location)
+    })
   }
 
   const proHistory = ref.current
 
   const [location, setLocation] = useState(history.location)
-
-  useEffect(() => {
-    proHistory.listen(function c({ location }) {
-      setLocation(location)
-    })
-  }, [proHistory])
 
   useUnmount(() => {
     proHistory.destroy()
