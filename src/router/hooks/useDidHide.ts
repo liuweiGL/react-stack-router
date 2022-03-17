@@ -1,6 +1,6 @@
 import { useRef } from 'react'
-import { PageStatus } from 'src/context/PageContext'
-import { Noop } from 'src/utils/function'
+import { PageStatus } from '../context/PageContext'
+import { Noop } from '../utils/function'
 import { usePage } from './usePage'
 
 export const useDidHide = (cb: Noop<never>) => {

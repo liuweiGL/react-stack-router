@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import { useDidHide, useDidShow } from 'react-stack-router'
+
+import { useDidHide, useDidShow } from '../../router'
 
 const IndexMap = new Map()
 

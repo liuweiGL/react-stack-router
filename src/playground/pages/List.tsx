@@ -1,5 +1,4 @@
-import { useRouter } from 'react-stack-router'
-
+import { useRouter } from '../../router'
 import { useTraceMount } from '../hooks/useTraceMount'
 import { useTraceShow } from '../hooks/useTraceShow'
 
