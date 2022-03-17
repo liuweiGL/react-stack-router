@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/liuweiGL/react-stack-router/compare/v1.1.0...v1.1.1) (2022-03-17)
+
+
+### Bug Fixes
+
+* fix npm tarball includes pnpm cache files ([2d31fd5](https://github.com/liuweiGL/react-stack-router/commit/2d31fd5c292a61d8ee3f0cd681527cfaf6bd8d8e))
+
 # [1.1.0](https://github.com/liuweiGL/react-stack-router/compare/v1.0.1...v1.1.0) (2022-03-17)
 
 
