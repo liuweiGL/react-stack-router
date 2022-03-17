@@ -1,3 +1,22 @@
+# [1.1.0](https://github.com/liuweiGL/react-stack-router/compare/v1.0.1...v1.1.0) (2022-03-17)
+
+
+### Bug Fixes
+
+* fix always load index page even if path include basename ([aabaeec](https://github.com/liuweiGL/react-stack-router/commit/aabaeecd619758ed9a8a1ed6178d13e344edec24))
+* fix the wrong join path with basename ([65b7137](https://github.com/liuweiGL/react-stack-router/commit/65b71373176322e80c72494a3c275008f1538304))
+
+
+### Features
+
+* add useParams hook ([cacc844](https://github.com/liuweiGL/react-stack-router/commit/cacc844d9ff5615eb360f51df6e178d1f054ec50))
+* support for passing params while navigating ([7e9f107](https://github.com/liuweiGL/react-stack-router/commit/7e9f1072042ab27c388bfb258e81eeddedb5ed8b))
+
+
+### Performance Improvements
+
+* reduce unnecessary rendering ([781df88](https://github.com/liuweiGL/react-stack-router/commit/781df88bed0f6b047869f32441b892a270fe527d))
+
 ## [1.0.1](https://github.com/liuweiGL/react-stack-router/compare/v1.0.0...v1.0.1) (2022-03-16)
 
 
