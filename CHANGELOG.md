@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/liuweiGL/react-stack-router/compare/v1.1.2...v1.1.3) (2022-03-17)
+
+
+### Bug Fixes
+
+* fix the dist not exists in npm package ([d79cbd3](https://github.com/liuweiGL/react-stack-router/commit/d79cbd31462e82dae9659a800f693f45cbafc720))
+
 ## [1.1.2](https://github.com/liuweiGL/react-stack-router/compare/v1.1.1...v1.1.2) (2022-03-17)
 
 
