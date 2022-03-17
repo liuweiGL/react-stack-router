@@ -8,7 +8,7 @@ import {
 
 import { useNavigation } from './useNavigation'
 
-export type NavigateToParams = Pick<NavigateForwardOptions, 'name' | 'url'>
+export type NavigateToParams = Omit<NavigateForwardOptions, 'type'>
 export type RedirectToParams = NavigateToParams
 export type SwitchTabParams = NavigateToParams
 export type NavigateBackParams = Pick<NavigateBackOptions, 'delta'>

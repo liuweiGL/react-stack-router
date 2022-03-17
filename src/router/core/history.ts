@@ -4,9 +4,11 @@ import { isLazyComponent, loadLazyComponent } from '../utils/component'
 import { Noop } from '../utils/function'
 import {
   containBasename,
+  createSearch,
   getPageKey,
   joinPaths,
   normalizePath,
+  parseParams,
   setPageKey,
   stripBasename
 } from '../utils/url'
@@ -21,7 +23,12 @@ type ProState = {
 export type ProTo =
   | To
   | {
+      url: string
+      params?: Record<any, any>
+    }
+  | {
       name: string
+      params?: Record<any, any>
     }
 
 export type ProUpdate = Update & {
@@ -224,11 +231,17 @@ export class ProHistory {
     } else if ('name' in to) {
       const route = matchRoute(this.routes, to.name)
 
-      path = route
-        ? {
-            pathname: route.path
-          }
-        : undefined
+      if (route) {
+        path = {
+          pathname: route.path,
+          search: createSearch(to.params)
+        }
+      }
+    } else if ('url' in to) {
+      path = parsePath(to.url)
+      path.search = createSearch(
+        Object.assign(parseParams(path.search), to.params)
+      )
     }
 
     if (path?.pathname) {
