@@ -1,3 +1,16 @@
+# [2.0.0](https://github.com/liuweiGL/react-stack-router/compare/v1.1.4...v2.0.0) (2022-03-19)
+
+
+### Code Refactoring
+
+* Adjust internal implementation ([05c1812](https://github.com/liuweiGL/react-stack-router/commit/05c18128c3ce6924338899837aa6031cfee59558))
+
+
+### BREAKING CHANGES
+
+* Changes cannot be summed up in one sentence
+For more information, see the release notes
+
 ## [1.1.4](https://github.com/liuweiGL/react-stack-router/compare/v1.1.3...v1.1.4) (2022-03-19)
 
 
