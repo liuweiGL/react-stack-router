@@ -1,6 +1,6 @@
-/* eslint-disable no-console */
-
 import { useDidHide, useDidShow } from '../../router'
+
+import { useLog } from './useLog'
 
 const IndexMap = new Map()
 
@@ -9,16 +9,18 @@ export const useTraceShow = (id: string) => {
     IndexMap.set(id, 0)
   }
 
+  const log = useLog(false)
+
   useDidShow(() => {
     IndexMap.set(id, IndexMap.get(id) + 1)
-    console.log(
+    log(
       `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} show ~~~~~~~~~~~~~~`,
       'color: #91d5ff'
     )
   })
 
   useDidHide(() => {
-    console.log(
+    log(
       `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} hide ~~~~~~~~~~~~~~`,
       'color: #ffccc7'
     )

@@ -5,6 +5,8 @@ const DetailPage = () => {
   useTraceMount('DetailPage')
 
   const params = useParams()
+  console.error(params)
+  console.warn('########## DetailPage render #########')
 
   return (
     <div>

@@ -4,6 +4,8 @@ import { useTraceMount } from '../hooks/useTraceMount'
 const RedirectPage = () => {
   useTraceMount('RedirectPage')
 
+  console.warn('########## RedirectPage render #########')
+
   return (
     <div>
       但行好事莫问前程 你和好天气一样惹人心动 听闻远方有你 我跋涉千里

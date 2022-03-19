@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+import { useLog } from './useLog'
 import { useMount } from './useMount'
 import { useUnmount } from './useUnmount'
 
@@ -9,16 +9,18 @@ export const useTraceMount = (id: string) => {
     IndexMap.set(id, 0)
   }
 
+  const log = useLog()
+
   useMount(() => {
     IndexMap.set(id, IndexMap.get(id) + 1)
-    console.log(
+    log(
       `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 加载 ~~~~~~~~~~~~~~`,
       'color: #1890ff'
     )
   })
 
   useUnmount(() => {
-    console.log(
+    log(
       `%c~~~~~~~~~~~~~~ 第 ${IndexMap.get(id)} 个 ${id} 卸载 ~~~~~~~~~~~~~~`,
       'color: #f5222d'
     )

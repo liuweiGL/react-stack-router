@@ -1,11 +1,17 @@
+/* eslint-disable no-console */
+import { useState } from 'react'
+
 import { BrowserRouter, Route } from '../router'
 
+import { AppContext } from './context/AppContext'
+import { LogContext } from './context/LoggerContext'
 import HomePage from './pages/Home'
 import ListPage from './pages/List'
 import RedirectPage from './pages/Redirect'
 
 const routes: Route[] = [
   {
+    type: 'tab',
     name: 'home',
     path: '/',
     component: HomePage,
@@ -42,7 +48,19 @@ const routes: Route[] = [
 ]
 
 function App() {
-  return <BrowserRouter basename='/test' routes={routes} />
+  const [state, setState] = useState({ a: 1 })
+  return (
+    <LogContext.Provider
+      value={{
+        enable: true,
+        logger: console.log
+      }}
+    >
+      <AppContext.Provider value={{ ...state, setState }}>
+        <BrowserRouter basename='/test' routes={routes} />
+      </AppContext.Provider>
+    </LogContext.Provider>
+  )
 }
 
 export default App

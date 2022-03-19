@@ -1,13 +1,17 @@
 import { useState } from 'react'
 
 import { Navigator } from '../../router'
+import { useApp } from '../hooks/useApp'
 import { useTraceMount } from '../hooks/useTraceMount'
 import { useTraceShow } from '../hooks/useTraceShow'
 
 const HomePage = () => {
   useTraceMount('Home')
   useTraceShow('Home')
-  const [state, setState] = useState(2222222)
+  const [count, setCount] = useState(2222222)
+  const { a } = useApp()
+
+  console.error('HomePage render with state: ', a)
 
   return (
     <div className='home-page'>
@@ -34,10 +38,10 @@ const HomePage = () => {
       tsconfig.json.
       <br />
       <br />
-      <code>{state}</code>
+      <code>{count}</code>
       <br />
       <br />
-      <button onClick={() => setState(11111111)}>设置状态</button>
+      <button onClick={() => setCount(11111111)}>设置状态</button>
       <br />
       <br />
       <Navigator name='list' params={{ test: 'aaa' }}>
