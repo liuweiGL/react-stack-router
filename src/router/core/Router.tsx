@@ -1,14 +1,16 @@
-import { useMemo } from 'react'
+import { useLayoutEffect, useMemo, useState } from 'react'
 
 import { createBrowserHistory, createHashHistory, History } from 'history'
 
 import { LocationProvider } from '../context/LocationContext'
 import { NavigationProvider } from '../context/NavigationContext'
-import { useWatch } from '../hooks/useWatch'
+import useCreation from '../hooks/useCreation'
+import { useForceUpdate } from '../hooks/useForceUpdate'
 
+import { ProHistory } from './history'
 import { Route } from './route'
 import RouterPage from './RouterPage'
-import { StackRoute } from './stack'
+import { Stack, StackRoute } from './stack'
 
 export type RouterProps = {
   basename?: string
@@ -28,13 +30,30 @@ const renderRoutes = (routes: StackRoute[]) => {
 }
 
 export const Router = ({ basename = '/', history, routes }: RouterProps) => {
-  const {
-    matches,
-    location,
-    history: proHistory
-  } = useWatch({ basename, history, routes })
+  const update = useForceUpdate()
 
-  const children = renderRoutes(matches)
+  const stack = useCreation(
+    {
+      factory: () => new Stack(update)
+    },
+    []
+  )
+
+  const proHistory = useCreation(
+    {
+      factory: () => new ProHistory({ basename, history, routes, stack }),
+      unmount: t => t.destroy()
+    },
+    [basename, history, routes, stack]
+  )
+
+  const [location, setLocation] = useState(history.location)
+
+  useLayoutEffect(() => {
+    return history.listen(({ location }) => setLocation(location))
+  }, [history])
+
+  const children = renderRoutes(stack.items)
 
   return (
     <NavigationProvider value={{ navigator: proHistory }}>

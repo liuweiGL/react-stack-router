@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, ProviderProps } from 'react'
+import { createContext, ProviderProps } from 'react'
 
 import { Location } from 'history'
 

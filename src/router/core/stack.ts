@@ -9,32 +9,14 @@ export type StackRoute = RouteRecord & {
   url: string
 }
 
-const createReactiveArray = (scheduler: Scheduler) => {
-  const initial: StackRoute[] = []
-
-  return new Proxy(initial, {
-    get(target, key: any) {
-      return target[key]
-    },
-    set(target, key: any, value) {
-      target[key] = value
-
-      if (key !== 'length') {
-        scheduler()
-      }
-
-      return true
-    }
-  })
-}
-
 export class Stack {
-  private tabs: StackRoute[]
-  private pages: StackRoute[]
+  private tabs: StackRoute[] = []
+  private pages: StackRoute[] = []
+
+  private scheduler: Scheduler
 
   constructor(scheduler: Scheduler) {
-    this.tabs = createReactiveArray(scheduler)
-    this.pages = createReactiveArray(scheduler)
+    this.scheduler = scheduler
   }
 
   get current() {
@@ -70,7 +52,6 @@ export class Stack {
     } else {
       this.tabs.push({ ...item })
     }
-
     this.clear()
   }
 
@@ -82,13 +63,17 @@ export class Stack {
     } else {
       this.pages.push({ ...item })
     }
+
+    this.scheduler()
   }
 
   pop() {
     this.pages.pop()
+    this.scheduler()
   }
 
   clear() {
     this.pages.splice(0, this.pages.length)
+    this.scheduler()
   }
 }

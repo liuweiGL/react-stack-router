@@ -1,6 +1,8 @@
 import { useRef } from 'react'
+
 import { PageStatus } from '../context/PageContext'
 import { Noop } from '../utils/function'
+
 import { usePage } from './usePage'
 
 export const useDidShow = (cb: Noop<never>) => {

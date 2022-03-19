@@ -1,4 +1,4 @@
-import { useRouter } from '../../router'
+import { useLocation, useParams, useRouter } from '../../router'
 import { useTraceMount } from '../hooks/useTraceMount'
 import { useTraceShow } from '../hooks/useTraceShow'
 
@@ -6,6 +6,10 @@ const ListPage = () => {
   useTraceMount('ListPage')
   useTraceShow('ListPage')
   const { navigateTo } = useRouter()
+
+  const params = useParams()
+
+  console.log(params)
 
   return (
     <ul>

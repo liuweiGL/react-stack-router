@@ -1,4 +1,4 @@
-import { LazyComponent } from "../core/route"
+import { LazyComponent } from '../core/route'
 
 export const isClassComponent = (component: any) => {
   return !!Object.getPrototypeOf(component)?.isReactComponent

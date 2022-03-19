@@ -298,7 +298,7 @@ export class ProHistory {
     return undefined
   }
 
-  destroy() {
+  destroy = () => {
     this.unlisteners.forEach(item => item())
   }
 }
