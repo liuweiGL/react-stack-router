@@ -1,13 +1,14 @@
 import { CSSProperties, MouseEvent, ReactNode } from 'react'
 
-import { useNavigation } from '../hooks/useNavigation'
-import { isModifiedEvent } from '../utils/event'
-
 import {
   navigate,
   NavigateBackOptions,
-  NavigateForwardOptions
-} from './navigate'
+  NavigateForwardOptions,
+  NavigateLaunchOptions
+} from '../../core/navigate'
+import { useNavigation } from '../../hooks/useNavigation'
+import { useRoute } from '../../hooks/useRoute'
+import { isModifiedEvent } from '../../utils/event'
 
 type ComponentProps = {
   className?: string
@@ -18,7 +19,11 @@ type ComponentProps = {
 }
 
 export type NavigatorProps = ComponentProps &
-  (Partial<NavigateForwardOptions> | NavigateBackOptions)
+  (
+    | Partial<NavigateForwardOptions>
+    | NavigateLaunchOptions
+    | NavigateBackOptions
+  )
 
 export const Navigator = ({
   className,
@@ -28,6 +33,7 @@ export const Navigator = ({
   onClick,
   ...navigateOptions
 }: NavigatorProps) => {
+  const { matches } = useRoute()
   const { navigator } = useNavigation()
 
   let href: string | undefined
@@ -39,6 +45,11 @@ export const Navigator = ({
     if (to) {
       href = navigator.createHref(to)
     }
+  } else {
+    const { delta = 1 } = navigateOptions
+    const route = matches[Math.max(0, matches.length - delta - 1)]
+
+    href = route ? navigator.createHref(route.url) : '/'
   }
 
   const handleNavigate = (event: MouseEvent) => {

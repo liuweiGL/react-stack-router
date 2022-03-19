@@ -1,13 +1,12 @@
-import { useMemo } from 'react'
+import { useContext } from 'react'
 
-import { parseParams } from '../utils/url'
+import { RouteContext } from '../context/RouteContext'
 
-import { useLocation } from './useLocation'
+/**
+ * 拆分开来，方便支持泛型
+ */
+export const useParams = <T>() => {
+  const { params } = useContext(RouteContext)
 
-export const useParams = () => {
-  const {
-    location: { search }
-  } = useLocation()
-
-  return useMemo(() => parseParams(search), [search])
+  return params as T
 }

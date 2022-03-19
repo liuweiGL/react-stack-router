@@ -5,7 +5,7 @@ export {
   HashRouter,
   type BrowserRouterProps,
   type HashRouterProps
-} from './core/Router'
+} from './components/Router'
 export {
   type Route,
   isPageRoute,
@@ -13,10 +13,11 @@ export {
   isSameRoute,
   matchRoute
 } from './core/route'
-export { Navigator, type NavigatorProps } from './core/Navigator'
+export { Navigator, type NavigatorProps } from './components/Navigator'
 
 export { useRouter, type RouterNavigator } from './hooks/useRouter'
 export { useLocation } from './hooks/useLocation'
+export { useRoute } from './hooks/useRoute'
 export { useParams } from './hooks/useParams'
 export { useDidHide } from './hooks/useDidHide'
 export { useDidShow } from './hooks/useDidShow'

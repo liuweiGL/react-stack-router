@@ -4,10 +4,16 @@ import { error } from '../utils/diagnosis'
 import { isTabRoute } from './route'
 
 export type NavigateForwardOptions = {
-  type: 'navigateTo' | 'switchTab' | 'redirectTo' | 'reLaunch'
+  type: 'navigateTo' | 'switchTab' | 'redirectTo'
   name?: string
   url?: string
   params?: Record<any, any>
+}
+
+export type NavigateLaunchOptions = Omit<NavigateForwardOptions, 'type'> & {
+  type: 'reLaunch'
+  // 是否销毁 tab 页面
+  force?: boolean
 }
 
 export type NavigateBackOptions = {
@@ -17,13 +23,13 @@ export type NavigateBackOptions = {
 
 export type NavigateOptions = {
   navigator: ProHistory
-} & (NavigateForwardOptions | NavigateBackOptions)
+} & (NavigateForwardOptions | NavigateLaunchOptions | NavigateBackOptions)
 
 export const navigate = async (options: NavigateOptions) => {
   return new Promise<void>((resolve, reject) => {
     const { navigator, type } = options
 
-    const unListen = navigator.listen(() => {
+    const unListen = navigator.on(() => {
       resolve()
       unListen()
     })
@@ -61,12 +67,13 @@ export const navigate = async (options: NavigateOptions) => {
         } else if (type === 'redirectTo') {
           navigator.replace(to)
         } else if (type === 'reLaunch') {
-          navigator.reset()
+          navigator.reset(options.force)
           navigator.push(to)
         }
       }
     } catch (error: any) {
-      reject(`${type}:fail ${error.message || error}`)
+      reject(`${type}:fail`)
+      console.error(error)
     }
   })
 }

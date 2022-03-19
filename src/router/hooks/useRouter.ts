@@ -21,8 +21,9 @@ export type RouterNavigator = {
 }
 
 export const useRouter = () => {
-  const ref = useRef<RouterNavigator>()
   const { navigator } = useNavigation()
+
+  const ref = useRef<RouterNavigator>()
 
   if (!ref.current) {
     ref.current = {
@@ -44,11 +45,5 @@ export const useRouter = () => {
     }
   }
 
-  return {
-    ...(ref.current as RouterNavigator),
-    currentRoute: navigator.currentRoute,
-    getSnapshoot() {
-      return navigator.stackSnapshoot
-    }
-  }
+  return ref.current as RouterNavigator
 }

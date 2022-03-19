@@ -1,14 +1,13 @@
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
 
-import { PageStatus } from '../context/PageContext'
+import { RouteContext } from '../context/RouteContext'
+import { RouteStatus } from '../core/route'
 import { Noop } from '../utils/function'
 
-import { usePage } from './usePage'
-
 export const useDidHide = (cb: Noop<never>) => {
-  const { status } = usePage()
+  const { status } = useContext(RouteContext)
 
-  const ref = useRef<PageStatus>()
+  const ref = useRef<RouteStatus>()
 
   if (status === 'hide' && ref.current !== 'hide') {
     cb()

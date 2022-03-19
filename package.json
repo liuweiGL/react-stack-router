@@ -35,7 +35,8 @@
     "prerelease": "npm run build"
   },
   "dependencies": {
-    "history": "^5.3.0"
+    "history": "^5.3.0",
+    "react-freeze": "^1.0.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.1",

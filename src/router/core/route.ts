@@ -1,7 +1,9 @@
 import {
   ComponentClass,
   ComponentType,
+  createElement,
   FunctionComponent,
+  ReactElement,
   ReactNode
 } from 'react'
 
@@ -13,32 +15,49 @@ export type LazyComponent = () => Promise<{
 
 export type RouteComponent = FunctionComponent | ComponentClass | LazyComponent
 
-type BaseRoute<Meta> = {
+export type RouteStatus = 'show' | 'hide'
+
+type BaseRoute<T> = {
   // 是否是首页
   index?: boolean
   // 唯一标识
   name?: string
   path: string
-  meta?: Meta
+  meta?: T
 }
 
-export type PageRoute<Meta = any> = BaseRoute<Meta> & {
+export type PageRoute<T = any> = BaseRoute<T> & {
   type?: 'page'
 }
 
-export type TabRoute<Meta = any> = BaseRoute<Meta> & {
+export type TabRoute<T = any> = BaseRoute<T> & {
   type: 'tab'
   icon?: ReactNode
 }
 
-export type RouteRaw<Meta = any> = PageRoute<Meta> | TabRoute<Meta>
+export type RouteRaw<T = any> = PageRoute<T> | TabRoute<T>
 
-export type Route<Meta = any> = RouteRaw<Meta> & {
+export type Route<T = any> = RouteRaw<T> & {
   component: RouteComponent
 }
 
-export type RouteRecord<Meta = any> = RouteRaw<Meta> & {
+export type NormalizedRoute = RouteRaw<any> & {
   component: Exclude<RouteComponent, LazyComponent>
+}
+
+export type RecordRaw<T = any> = RouteRaw<T> & {
+  pageKey: string
+  // It's helpful to recover browser url when user navigate back
+  url: string
+  params: Record<any, any>
+}
+
+export type ResolveRecord<T = any> = RecordRaw<T> & {
+  component: Exclude<RouteComponent, LazyComponent>
+}
+
+export type MatchRecord<T = any> = RecordRaw<T> & {
+  node: ReactElement
 }
 
 export const isTabRoute = (route: RouteRaw): route is TabRoute => {
@@ -68,4 +87,14 @@ export const matchRoute = (routes: Route[], nameOrPath?: string) => {
   )
 
   return route
+}
+
+export const getMatchRecord = ({
+  component,
+  ...restRecord
+}: ResolveRecord): MatchRecord => {
+  return {
+    ...restRecord,
+    node: createElement(component, { key: restRecord.pageKey })
+  }
 }

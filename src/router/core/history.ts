@@ -1,4 +1,4 @@
-import { createPath, History, parsePath, Path, To, Update } from 'history'
+import { createPath, History, Location, parsePath, Path, To } from 'history'
 
 import { isLazyComponent, loadLazyComponent } from '../utils/component'
 import { Noop } from '../utils/function'
@@ -13,7 +13,13 @@ import {
   stripBasename
 } from '../utils/url'
 
-import { isTabRoute, matchRoute, Route, RouteRecord } from './route'
+import {
+  isTabRoute,
+  matchRoute,
+  Route,
+  NormalizedRoute,
+  MatchRecord
+} from './route'
 import { Stack } from './stack'
 
 type ProState = {
@@ -31,56 +37,58 @@ export type ProTo =
       params?: Record<any, any>
     }
 
-export type ProUpdate = Update & {
-  route: RouteRecord
+export type ProOptions = {
+  pageKey: string
+  route: NormalizedRoute
+  location: Location
 }
 
-export type ProListener = (options: ProUpdate) => void
+export type ProListener = (options: ProOptions) => void
 
-export type ProBlocker = (options: ProUpdate) => boolean | undefined
+export type ProBlocker = (options: ProOptions) => boolean | undefined
+
+export type ProInfo = {
+  location: Location
+  records: MatchRecord[]
+}
+
+export type ProSubscriber = (options: ProInfo) => void
 
 export type HistoryProps = {
   basename: string
   history: History
   routes: Route[]
-  stack: Stack
+  subscriber: ProSubscriber
 }
 
 export class ProHistory {
   public basename: string
   private history: History
   private routes: Route[]
+  private subscriber: ProSubscriber
+
   private stack: Stack
 
-  private routeRecordMap: Map<string, RouteRecord>
-  private blockerMap: Map<number, ProBlocker>
+  private routeMap: Map<string, NormalizedRoute> = new Map()
+  private blockerMap: Map<number, ProBlocker> = new Map()
 
   private listeners: ProListener[] = []
   private unlisteners: Noop[] = []
 
-  constructor({ basename, history, routes, stack }: HistoryProps) {
+  constructor({ basename, history, routes, subscriber }: HistoryProps) {
     this.basename = normalizePath(basename)
     this.routes = routes
-    this.stack = stack
     this.history = history
-    this.routeRecordMap = new Map()
-    this.blockerMap = new Map()
+    this.subscriber = subscriber
+    this.stack = new Stack(this.emitChange.bind(this))
 
-    this.initSubscriber()
-    this.initWatcher()
-    this.loadIndexPage()
+    this.proxyHistoryEvent()
+    this.registerController()
+    this.loadFirstPage()
   }
 
   get location() {
     return this.history.location
-  }
-
-  get currentRoute() {
-    return this.stack.current
-  }
-
-  get stackSnapshoot() {
-    return this.stack.items.slice()
   }
 
   private get indexRoute() {
@@ -99,11 +107,11 @@ export class ProHistory {
     }
 
     const { path, component } = route
-    if (this.routeRecordMap.has(path)) {
-      return this.routeRecordMap.get(path)
+    if (this.routeMap.has(path)) {
+      return this.routeMap.get(path)
     }
 
-    let routeRecord: RouteRecord
+    let routeRecord: NormalizedRoute
 
     if (isLazyComponent(component)) {
       const resolvedComponent = await loadLazyComponent(component)
@@ -123,19 +131,37 @@ export class ProHistory {
       }
     }
 
-    this.routeRecordMap.set(path, routeRecord)
+    this.routeMap.set(path, routeRecord)
 
     return routeRecord
   }
 
   /**
-   * 包装 history 的 listen 事件，处理 basename
+   * 对外暴露路由栈变化
    */
-  private initSubscriber() {
+  private emitChange() {
+    this.subscriber({
+      location: this.location,
+      records: this.stack.items
+    })
+  }
+
+  /**
+   * 代理 history 的 listen 事件，处理 basename 并提供更多的参数
+   */
+  private proxyHistoryEvent() {
     const unlistener = this.history.listen(async options => {
       const {
+        location,
         location: { pathname, state }
       } = options
+
+      const pageKey = getPageKey(location)
+
+      if (!pageKey) {
+        this.history.replace(setPageKey(location))
+        return
+      }
 
       const path = stripBasename(this.basename, pathname)
 
@@ -151,7 +177,8 @@ export class ProHistory {
 
       const proOptions = {
         ...options,
-        route
+        route,
+        pageKey
       }
 
       if (state) {
@@ -165,9 +192,10 @@ export class ProHistory {
         }
       }
 
-      this.listeners.forEach(listen => {
-        listen(proOptions)
-      })
+      // 让 initWatcher 中添加的事件最后执行，以保证组件在所有处理完成之后再渲染
+      for (let i = this.listeners.length - 1; i >= 0; i--) {
+        this.listeners[i](proOptions)
+      }
     })
 
     this.unlisteners.push(unlistener)
@@ -176,48 +204,34 @@ export class ProHistory {
   /**
    * 当 history 变化时维护路由
    */
-  private initWatcher() {
-    this.listen(({ route, location }) => {
+  private registerController() {
+    this.on(({ route, pageKey, location }) => {
       const url = createPath(location)
-
-      const pageKey = getPageKey(location)
-
-      if (pageKey) {
-        const stackRoute = {
-          pageKey,
-          url,
-          ...route
-        }
-
-        if (isTabRoute(route)) {
-          this.stack.switchTab(stackRoute)
-        } else {
-          this.stack.jumpPage(stackRoute)
-        }
-      } else {
-        this.history.replace(setPageKey(location))
+      const params = parseParams(location.search)
+      const record = {
+        url,
+        params,
+        pageKey,
+        ...route
       }
+
+      if (isTabRoute(record)) {
+        this.stack.switchTab(record)
+      } else {
+        this.stack.jumpPage(record)
+      }
+      this.stack.startTransaction()
     })
   }
 
   /**
-   * 如果当前路径根 basename 不匹配时，默认加载首页
+   * 加载首个页面，如果当前路径跟 basename 不匹配则默认加载首页
    */
-  private loadIndexPage() {
+  private loadFirstPage() {
     if (this.containBasename(this.location.pathname)) {
       this.replace(this.location)
     } else {
       this.replace(this.indexRoute.path)
-    }
-  }
-
-  listen(listener: ProListener) {
-    this.listeners.push(listener)
-
-    const index = this.listeners.length - 1
-
-    return () => {
-      this.listeners.splice(index, 1)
     }
   }
 
@@ -254,6 +268,16 @@ export class ProHistory {
     return path
   }
 
+  on(listener: ProListener) {
+    this.listeners.push(listener)
+
+    const index = this.listeners.length - 1
+
+    return () => {
+      this.listeners.splice(index, 1)
+    }
+  }
+
   push(to: ProTo, blocker?: ProBlocker) {
     const result = this.resolveTo(to)
 
@@ -278,14 +302,16 @@ export class ProHistory {
     }
   }
 
-  reset() {
-    this.stack.clear()
+  reset(force?: boolean) {
+    this.stack.clear(force)
   }
 
   back(delta = 1) {
     const prePage = this.stack.getLastItem(delta)
 
-    this.history.replace(prePage.url)
+    if (prePage) {
+      this.history.replace(prePage.url)
+    }
   }
 
   createHref(to: ProTo) {
