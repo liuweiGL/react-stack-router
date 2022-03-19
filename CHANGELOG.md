@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/liuweiGL/react-stack-router/compare/v1.1.3...v1.1.4) (2022-03-19)
+
+
+### Performance Improvements
+
+* reduce unnecessary rendering ([a232eeb](https://github.com/liuweiGL/react-stack-router/commit/a232eeb9a3056001f4a26ed9acdb36cbbab9bc19))
+
 ## [1.1.3](https://github.com/liuweiGL/react-stack-router/compare/v1.1.2...v1.1.3) (2022-03-17)
 
 
