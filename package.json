@@ -29,8 +29,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc -p tsconfig.build.json",
-    "lint": "tsc -p tsconfig.build.json --noEmit && eslint \"router/**/*.ts?(x)\" --color --quiet --fix",
+    "lint": "tsc -p tsconfig.json --noEmit && eslint \"src/router/**/*.ts?(x)\" --color --quiet --fix",
     "release": "semantic-release",
+    "prebuild": "npm run lint",
     "prepack": "npm run build"
   },
   "dependencies": {
