@@ -23,7 +23,6 @@ export function useForceUpdate() {
   }, EMPTY_ARRAY)
 
   const scheduler = useCallback(() => {
-    console.warn(`RENDER_COUNT.value`, RENDER_COUNT.value)
     if (RENDER_COUNT.value === 0) {
       update()
     } else {
