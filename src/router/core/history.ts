@@ -1,8 +1,9 @@
 import { createPath, History, Location, parsePath, Path, To } from 'history'
 
-import { WAITING_FIRST_MATCH } from '../constants/global'
 import { isLazyComponent, loadLazyComponent } from '../utils/component'
+import { PAGE_KEY } from '../utils/constants'
 import { Noop } from '../utils/function'
+import { WAITING_FIRST_MATCH } from '../utils/global'
 import {
   containBasename,
   createSearch,
@@ -81,7 +82,7 @@ export class ProHistory {
     this.routes = routes
     this.history = history
     this.subscriber = subscriber
-    this.stack = new Stack(this.emitChange.bind(this))
+    this.stack = new Stack()
 
     this.proxyHistoryEvent()
     this.registerController()
@@ -94,6 +95,15 @@ export class ProHistory {
 
   private get indexRoute() {
     return this.routes.find(item => item.index) || this.routes[0]
+  }
+  /**
+   * 对外暴露路由栈变化
+   */
+  private notify() {
+    this.subscriber({
+      location: this.location,
+      records: this.stack.items
+    })
   }
 
   private containBasename(pathname: string) {
@@ -135,16 +145,6 @@ export class ProHistory {
     this.routeMap.set(path, routeRecord)
 
     return routeRecord
-  }
-
-  /**
-   * 对外暴露路由栈变化
-   */
-  private emitChange() {
-    this.subscriber({
-      location: this.location,
-      records: this.stack.items
-    })
   }
 
   /**
@@ -224,7 +224,8 @@ export class ProHistory {
       } else {
         this.stack.jumpPage(record)
       }
-      this.stack.startTransaction()
+
+      this.notify()
     })
   }
 
@@ -266,7 +267,10 @@ export class ProHistory {
       if (!this.containBasename(path.pathname)) {
         path.pathname = joinPaths(this.basename, path.pathname)
       }
-      path = setPageKey(path)
+
+      if (!parseParams(path.search)[PAGE_KEY]) {
+        path = setPageKey(path)
+      }
     }
 
     return path

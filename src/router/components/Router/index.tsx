@@ -3,13 +3,13 @@ import { Freeze } from 'react-freeze'
 
 import { createBrowserHistory, createHashHistory, History } from 'history'
 
-import { WAITING_FIRST_MATCH } from '../../constants/global'
 import { LocationContext } from '../../context/LocationContext'
 import { NavigationContext } from '../../context/NavigationContext'
 import { RouteContext } from '../../context/RouteContext'
-import { ProHistory, ProInfo, ProSubscriber } from '../../core/history'
+import { ProHistory, ProInfo } from '../../core/history'
 import { MatchRecord, Route } from '../../core/route'
 import useCreation from '../../hooks/useCreation'
+import { WAITING_FIRST_MATCH } from '../../utils/global'
 import NotFound from '../NotFound'
 
 export type ErrorInfo = {
@@ -73,8 +73,6 @@ export const Router = ({
     },
     [basename, history, routes]
   )
-
-  console.log(records)
 
   const children = renderRoutes(records, onError)
 

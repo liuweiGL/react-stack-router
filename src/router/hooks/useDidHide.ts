@@ -9,6 +9,7 @@ export const useDidHide = (cb: Noop<never>) => {
 
   const ref = useRef<RouteStatus>()
 
+  // console.log(' ========= useDidHide ========')
   if (status === 'hide' && ref.current !== 'hide') {
     cb()
   }
