@@ -3,10 +3,11 @@ import { Freeze } from 'react-freeze'
 
 import { createBrowserHistory, createHashHistory, History } from 'history'
 
+import { WAITING_FIRST_MATCH } from '../../constants/global'
 import { LocationContext } from '../../context/LocationContext'
 import { NavigationContext } from '../../context/NavigationContext'
 import { RouteContext } from '../../context/RouteContext'
-import { ProHistory, ProInfo } from '../../core/history'
+import { ProHistory, ProInfo, ProSubscriber } from '../../core/history'
 import { MatchRecord, Route } from '../../core/route'
 import useCreation from '../../hooks/useCreation'
 import NotFound from '../NotFound'
@@ -15,6 +16,7 @@ export type ErrorInfo = {
   type: '404'
   error?: Error
 }
+
 export type ErrorHandler = (info: ErrorInfo) => ReactNode | void
 
 export type RouterProps = {
@@ -28,6 +30,11 @@ const renderRoutes = (records: MatchRecord[], handleError?: ErrorHandler) => {
   const { length } = records
 
   if (length < 1) {
+    // TODO: insert loading?
+    if (WAITING_FIRST_MATCH.value) {
+      return null
+    }
+
     return handleError?.({ type: '404' }) || <NotFound />
   }
 
@@ -57,6 +64,7 @@ export const Router = ({
     location: history.location,
     records: []
   })
+
   const proHistory = useCreation(
     {
       factory: () =>
@@ -65,6 +73,8 @@ export const Router = ({
     },
     [basename, history, routes]
   )
+
+  console.log(records)
 
   const children = renderRoutes(records, onError)
 

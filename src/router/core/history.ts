@@ -1,5 +1,6 @@
 import { createPath, History, Location, parsePath, Path, To } from 'history'
 
+import { WAITING_FIRST_MATCH } from '../constants/global'
 import { isLazyComponent, loadLazyComponent } from '../utils/component'
 import { Noop } from '../utils/function'
 import {
@@ -162,6 +163,9 @@ export class ProHistory {
         this.history.replace(setPageKey(location))
         return
       }
+
+      // 允许渲染 404 页面
+      WAITING_FIRST_MATCH.value = false
 
       const path = stripBasename(this.basename, pathname)
 
