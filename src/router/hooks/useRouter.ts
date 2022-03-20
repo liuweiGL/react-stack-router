@@ -39,7 +39,7 @@ export const useRouter = () => {
         return navigate({ navigator, type: 'switchTab', ...options })
       },
 
-      navigateBack: (options: NavigateBackParams) => {
+      navigateBack: (options?: NavigateBackParams) => {
         return navigate({ navigator, type: 'navigateBack', ...options })
       }
     }
