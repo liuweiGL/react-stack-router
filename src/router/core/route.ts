@@ -81,10 +81,7 @@ export const matchRoute = (routes: Route[], nameOrPath?: string) => {
     )
   }
 
-  warning(
-    !route,
-    `Can not find the route when name or path is  \`${nameOrPath}\` `
-  )
+  warning(!route, `Route not found when name or path is  \`${nameOrPath}\` `)
 
   return route
 }

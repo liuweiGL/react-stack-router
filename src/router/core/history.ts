@@ -95,6 +95,7 @@ export class ProHistory {
   private get indexRoute() {
     return this.routes.find(item => item.index) || this.routes[0]
   }
+
   /**
    * 对外暴露路由栈变化
    */
@@ -109,8 +110,18 @@ export class ProHistory {
     return containBasename(this.basename, pathname)
   }
 
-  private async resolveRouteRecord(pathname: string) {
+  private matchRoute(pathname: string) {
     const route = matchRoute(this.routes, pathname)
+
+    if (!route) {
+      this.redirectTo404()
+    }
+
+    return route
+  }
+
+  private async resolveRouteRecord(pathname: string) {
+    const route = this.matchRoute(pathname)
 
     if (!route) {
       return
@@ -146,6 +157,15 @@ export class ProHistory {
     return routeRecord
   }
 
+  private redirectTo404() {
+    // 不要使用 this.matchRoute，会导致递归调用
+    const route = matchRoute(this.routes, DEFAULT_PATH_404)
+
+    if (route) {
+      this.replace(DEFAULT_PATH_404)
+    }
+  }
+
   /**
    * 代理 history 的 listen 事件，处理 basename 并提供更多的参数
    */
@@ -172,9 +192,6 @@ export class ProHistory {
       const route = await this.resolveRouteRecord(path)
 
       if (!route) {
-        if (!path.includes(DEFAULT_PATH_404)) {
-          this.replace(DEFAULT_PATH_404)
-        }
         return
       }
 
@@ -247,13 +264,15 @@ export class ProHistory {
     } else if ('pathname' in to) {
       path = Object.assign({}, to)
     } else if ('name' in to) {
-      const route = matchRoute(this.routes, to.name)
+      const route = this.matchRoute(to.name)
 
-      if (route) {
-        path = {
-          pathname: route.path,
-          search: createSearch(to.params)
-        }
+      if (!route) {
+        return
+      }
+
+      path = {
+        pathname: route.path,
+        search: createSearch(to.params)
       }
     } else if ('url' in to) {
       path = parsePath(to.url)

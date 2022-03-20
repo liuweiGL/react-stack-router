@@ -9,18 +9,11 @@ import { RouteContext } from '../../context/RouteContext'
 import { ProHistory, ProInfo } from '../../core/history'
 import { MatchRecord, Route } from '../../core/route'
 import useCreation from '../../hooks/useCreation'
-import { DEFAULT_PATH_404 } from '../../utils/constants'
-import NotFound from '../NotFound'
 
 export type RouterProps = {
   basename?: string
   history: History
   routes: Route[]
-}
-
-const defaultRoute = {
-  path: DEFAULT_PATH_404,
-  component: NotFound
 }
 
 const renderRoutes = (records: MatchRecord[]) => {
@@ -48,20 +41,18 @@ export const Router = ({ basename = '/', history, routes }: RouterProps) => {
     records: []
   })
 
-  const mergedRoutes = useMemo(() => [...routes, defaultRoute], [routes])
-
   const proHistory = useCreation(
     {
       factory: () =>
         new ProHistory({
           basename,
           history,
-          routes: mergedRoutes,
+          routes: routes,
           subscriber: setState
         }),
       unmount: t => t.destroy()
     },
-    [basename, history, mergedRoutes]
+    [basename, history, routes]
   )
 
   const children = renderRoutes(records)
