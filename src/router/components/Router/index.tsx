@@ -1,4 +1,4 @@
-import { ReactNode, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Freeze } from 'react-freeze'
 
 import { createBrowserHistory, createHashHistory, History } from 'history'
@@ -9,34 +9,22 @@ import { RouteContext } from '../../context/RouteContext'
 import { ProHistory, ProInfo } from '../../core/history'
 import { MatchRecord, Route } from '../../core/route'
 import useCreation from '../../hooks/useCreation'
-import { WAITING_FIRST_MATCH } from '../../utils/global'
+import { DEFAULT_PATH_404 } from '../../utils/constants'
 import NotFound from '../NotFound'
-
-export type ErrorInfo = {
-  type: '404'
-  error?: Error
-}
-
-export type ErrorHandler = (info: ErrorInfo) => ReactNode | void
 
 export type RouterProps = {
   basename?: string
   history: History
   routes: Route[]
-  onError?: ErrorHandler
 }
 
-const renderRoutes = (records: MatchRecord[], handleError?: ErrorHandler) => {
+const defaultRoute = {
+  path: DEFAULT_PATH_404,
+  component: NotFound
+}
+
+const renderRoutes = (records: MatchRecord[]) => {
   const { length } = records
-
-  if (length < 1) {
-    // TODO: insert loading?
-    if (WAITING_FIRST_MATCH.value) {
-      return null
-    }
-
-    return handleError?.({ type: '404' }) || <NotFound />
-  }
 
   return records.map((record, index) => {
     const { pageKey, node, params } = record
@@ -54,27 +42,29 @@ const renderRoutes = (records: MatchRecord[], handleError?: ErrorHandler) => {
   })
 }
 
-export const Router = ({
-  basename = '/',
-  history,
-  routes,
-  onError
-}: RouterProps) => {
+export const Router = ({ basename = '/', history, routes }: RouterProps) => {
   const [{ location, records }, setState] = useState<ProInfo>({
     location: history.location,
     records: []
   })
 
+  const mergedRoutes = useMemo(() => [...routes, defaultRoute], [routes])
+
   const proHistory = useCreation(
     {
       factory: () =>
-        new ProHistory({ basename, history, routes, subscriber: setState }),
+        new ProHistory({
+          basename,
+          history,
+          routes: mergedRoutes,
+          subscriber: setState
+        }),
       unmount: t => t.destroy()
     },
-    [basename, history, routes]
+    [basename, history, mergedRoutes]
   )
 
-  const children = renderRoutes(records, onError)
+  const children = renderRoutes(records)
 
   return (
     <NavigationContext.Provider value={{ navigator: proHistory }}>

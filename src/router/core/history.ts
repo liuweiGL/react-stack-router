@@ -1,9 +1,8 @@
 import { createPath, History, Location, parsePath, Path, To } from 'history'
 
 import { isLazyComponent, loadLazyComponent } from '../utils/component'
-import { PAGE_KEY } from '../utils/constants'
+import { DEFAULT_PATH_404, PAGE_KEY } from '../utils/constants'
 import { Noop } from '../utils/function'
-import { WAITING_FIRST_MATCH } from '../utils/global'
 import {
   containBasename,
   createSearch,
@@ -164,9 +163,6 @@ export class ProHistory {
         return
       }
 
-      // 允许渲染 404 页面
-      WAITING_FIRST_MATCH.value = false
-
       const path = stripBasename(this.basename, pathname)
 
       if (!path) {
@@ -176,6 +172,9 @@ export class ProHistory {
       const route = await this.resolveRouteRecord(path)
 
       if (!route) {
+        if (!path.includes(DEFAULT_PATH_404)) {
+          this.replace(DEFAULT_PATH_404)
+        }
         return
       }
 
