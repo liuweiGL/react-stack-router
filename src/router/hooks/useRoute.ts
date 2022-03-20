@@ -6,7 +6,7 @@ import { MatchRecord } from '../core/route'
 /**
  * 拆分开来，方便支持泛型
  */
-export const useRoute = <T>() => {
+export const useRoute = <T = Record<any, any>>() => {
   const { current, matches } = useContext(RouteContext)
 
   return {
