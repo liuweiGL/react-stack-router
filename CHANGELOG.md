@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/liuweiGL/react-stack-router/compare/v2.1.0...v2.2.0) (2022-03-20)
+
+
+### Features
+
+* remove default 404 page ([6eefaca](https://github.com/liuweiGL/react-stack-router/commit/6eefacacaf0cb5fdf8cdd6de1363c3ff7449ca77))
+
 # [2.1.0](https://github.com/liuweiGL/react-stack-router/compare/v2.0.0...v2.1.0) (2022-03-20)
 
 
