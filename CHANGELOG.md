@@ -1,3 +1,17 @@
+# [2.1.0](https://github.com/liuweiGL/react-stack-router/compare/v2.0.0...v2.1.0) (2022-03-20)
+
+
+### Bug Fixes
+
+* fix router stack records incorrect ([55e493e](https://github.com/liuweiGL/react-stack-router/commit/55e493eb0d8f9f8bfbc8cbfdda1f34abe7e51b89))
+* fix unexpected 404 page rendering on first visit ([36b42c5](https://github.com/liuweiGL/react-stack-router/commit/36b42c5f82d606de2985edb53ad5e4c609ebbade))
+
+
+### Features
+
+* generic types add default type ([482ff34](https://github.com/liuweiGL/react-stack-router/commit/482ff3449ac7ad6144167fa50ec312d51638ac94))
+* make navigateBack's paramater is optional ([23cd52a](https://github.com/liuweiGL/react-stack-router/commit/23cd52ab6b58181b381a1bbf05508633dba68204))
+
 # [2.0.0](https://github.com/liuweiGL/react-stack-router/compare/v1.1.4...v2.0.0) (2022-03-19)
 
 
