@@ -1,26 +1,40 @@
+import { useState } from 'react'
+
 import { useRouter } from '../../router'
-import { useApp } from '../hooks/useApp'
 import { useTraceMount } from '../hooks/useTraceMount'
 import { useTraceShow } from '../hooks/useTraceShow'
+import { getRandomColor } from '../uitls/color'
 
 const ListPage = () => {
   useTraceMount('ListPage')
   useTraceShow('ListPage')
 
   const { navigateTo } = useRouter()
-  const { setState } = useApp()
-
-  console.warn('########## ListPage render #########')
+  const [color, setColor] = useState('#333')
 
   return (
-    <div>
+    <div
+      className='list-page'
+      style={{
+        color,
+        textAlign: 'center'
+      }}
+    >
+      <br />
+      <br />
+
       <button
         onClick={() => {
-          setState({ a: Math.random() })
+          navigateTo({
+            url: '/detail?a=1&b=2',
+            params: { c: 3, d: 'false' }
+          })
         }}
       >
-        测试 freeze 效果，Home 页面不应该打印日志
+        NavigateTo Detail
       </button>
+      <br />
+      <br />
       <ul>
         {Array.from({ length: 20 })
           .fill(1)
@@ -30,17 +44,11 @@ const ListPage = () => {
                 key={index}
                 style={{
                   padding: '20px',
-                  textAlign: 'center',
                   borderBottom: '1px solid #eee'
                 }}
-                onClick={() => {
-                  navigateTo({
-                    url: '/detail?a=1&b=2',
-                    params: { c: 3, d: 'false' }
-                  })
-                }}
+                onClick={() => setColor(getRandomColor())}
               >
-                {index} 点击进入详情页
+                {index} Set Random Color
               </li>
             )
           })}

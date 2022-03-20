@@ -5,11 +5,9 @@ const DetailPage = () => {
   useTraceMount('DetailPage')
 
   const params = useParams()
-  console.error(params)
-  console.warn('########## DetailPage render #########')
 
   return (
-    <div>
+    <div className='detail-page'>
       <article>
         所有不如意的都会烟消云散 知足且上进 温柔而坚定
         我看什么都像你，我看月亮，像你，看星星，也像你。那些白亮透澈、温柔冷清的光，它们都让我想起你。
@@ -21,15 +19,12 @@ const DetailPage = () => {
         ᵍᵒᵒᵈ ˡⁱᶠᵉ ᵐᵉᵉᵗ ˢˡᵒʷˡʸ 不求人好感 不予人难堪
       </article>
       <br />
-      <br />
-      <Navigator title='重新进入首页' type='reLaunch' url='/' />
-      <br />
       <pre>
         params:
         {JSON.stringify(params, null, 2)}
       </pre>
       <br />
-      <Navigator name='redirect' title='进入下一页' type='navigateTo' />
+      <Navigator name='redirect' title='RedirectTo Last' type='redirectTo' />
     </div>
   )
 }

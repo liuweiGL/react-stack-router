@@ -6,8 +6,8 @@ import { BrowserRouter, Route } from '../router'
 import { AppContext } from './context/AppContext'
 import { LogContext } from './context/LoggerContext'
 import HomePage from './pages/Home'
+import LastPage from './pages/Last'
 import ListPage from './pages/List'
-import RedirectPage from './pages/Redirect'
 
 const routes: Route[] = [
   {
@@ -40,7 +40,7 @@ const routes: Route[] = [
   {
     name: 'redirect',
     path: '/redirect',
-    component: RedirectPage,
+    component: LastPage,
     meta: {
       title: '重定向'
     }
@@ -52,7 +52,7 @@ function App() {
   return (
     <LogContext.Provider
       value={{
-        enable: true,
+        enable: false,
         logger: console.log
       }}
     >

@@ -9,7 +9,7 @@ export const useTraceShow = (id: string) => {
     IndexMap.set(id, 0)
   }
 
-  const log = useLog(false)
+  const log = useLog()
 
   useDidShow(() => {
     IndexMap.set(id, IndexMap.get(id) + 1)
