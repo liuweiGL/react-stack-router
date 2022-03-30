@@ -17,7 +17,7 @@ export type RouterNavigator = {
   navigateTo: (options: NavigateToParams) => Promise<void>
   redirectTo: (options: RedirectToParams) => Promise<void>
   switchTab: (options: SwitchTabParams) => Promise<void>
-  navigateBack: (options: NavigateBackParams) => Promise<void>
+  navigateBack: (options?: NavigateBackParams) => Promise<void>
 }
 
 export const useRouter = () => {
