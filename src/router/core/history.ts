@@ -111,7 +111,7 @@ export class ProHistory {
   }
 
   private matchRoute(pathname: string) {
-    const route = matchRoute(this.routes, pathname)
+    const route = matchRoute(this.routes, normalizePath(pathname))
 
     if (!route) {
       this.redirectTo404()
@@ -128,6 +128,7 @@ export class ProHistory {
     }
 
     const { path, component } = route
+
     if (this.routeMap.has(path)) {
       return this.routeMap.get(path)
     }
