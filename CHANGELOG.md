@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/liuweiGL/react-stack-router/compare/v2.2.0...v2.3.0) (2022-03-30)
+
+
+### Features
+
+* export more features ([d04c640](https://github.com/liuweiGL/react-stack-router/commit/d04c6403640926ff6517afdce8388fb9cd1df6dd))
+
 # [2.2.0](https://github.com/liuweiGL/react-stack-router/compare/v2.1.0...v2.2.0) (2022-03-20)
 
 
