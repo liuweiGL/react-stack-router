@@ -1,8 +1,16 @@
+export {
+  createBrowserHistory,
+  createHashHistory,
+  createMemoryHistory,
+  createPath
+} from 'history'
 import { Route } from './core/route'
 
 export {
+  Router,
   BrowserRouter,
   HashRouter,
+  type RouterProps,
   type BrowserRouterProps,
   type HashRouterProps
 } from './components/Router'
