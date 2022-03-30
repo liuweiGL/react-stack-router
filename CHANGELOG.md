@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/liuweiGL/react-stack-router/compare/v2.3.0...v2.3.1) (2022-03-30)
+
+
+### Bug Fixes
+
+* fix RouterNavigator declaration error ([bb88722](https://github.com/liuweiGL/react-stack-router/commit/bb887226f308a34697f1729de2ac47df5d2bd982))
+
 # [2.3.0](https://github.com/liuweiGL/react-stack-router/compare/v2.2.0...v2.3.0) (2022-03-30)
 
 
