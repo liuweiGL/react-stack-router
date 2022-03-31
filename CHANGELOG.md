@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/liuweiGL/react-stack-router/compare/v2.3.2...v2.3.3) (2022-03-31)
+
+
+### Bug Fixes
+
+* using normalized path to match route ([4c6d65d](https://github.com/liuweiGL/react-stack-router/commit/4c6d65d7357e66200751648aa44c3a8c23e9a27a))
+
 ## [2.3.2](https://github.com/liuweiGL/react-stack-router/compare/v2.3.1...v2.3.2) (2022-03-30)
 
 
