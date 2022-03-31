@@ -8,6 +8,7 @@ import {
 } from 'react'
 
 import { warning } from '../utils/diagnosis'
+import { normalizePath } from '../utils/url'
 
 export type LazyComponent = () => Promise<{
   default: ComponentType<any>
@@ -77,7 +78,8 @@ export const matchRoute = (routes: Route[], nameOrPath?: string) => {
 
   if (nameOrPath) {
     route = routes.find(
-      ({ name, path }) => name === nameOrPath || path === nameOrPath
+      ({ name, path }) =>
+        name === nameOrPath || normalizePath(path) === normalizePath(nameOrPath)
     )
   }
 

@@ -111,7 +111,7 @@ export class ProHistory {
   }
 
   private matchRoute(pathname: string) {
-    const route = matchRoute(this.routes, normalizePath(pathname))
+    const route = matchRoute(this.routes, pathname)
 
     if (!route) {
       this.redirectTo404()

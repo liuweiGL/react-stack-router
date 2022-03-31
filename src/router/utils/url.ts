@@ -22,7 +22,7 @@ export const joinPaths = (...paths: string[]) => {
 }
 
 export const normalizePath = (pathname: string) => {
-  return pathname.replace(/^\/*/, '/').replace(/\/+$/, '')
+  return pathname.replace(/^\/*/, '/').replace(/\/+$/, '/')
 }
 
 export const parseParams = (url?: string) => {
