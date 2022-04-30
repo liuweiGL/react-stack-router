@@ -1,4 +1,7 @@
+import { createElement } from 'react'
+
 import { createPath, History, Location, parsePath, Path, To } from 'history'
+import { match } from 'path-to-regexp'
 
 import { isLazyComponent, loadLazyComponent } from '../utils/component'
 import { DEFAULT_PATH_404, PAGE_KEY } from '../utils/constants'
@@ -120,7 +123,7 @@ export class ProHistory {
     return route
   }
 
-  private async resolveRouteRecord(pathname: string) {
+  private async resolveRoute(pathname: string) {
     const route = this.matchRoute(pathname)
 
     if (!route) {
@@ -190,7 +193,7 @@ export class ProHistory {
         return
       }
 
-      const route = await this.resolveRouteRecord(path)
+      const route = await this.resolveRoute(path)
 
       if (!route) {
         return
@@ -226,24 +229,32 @@ export class ProHistory {
    * 当 history 变化时维护路由
    */
   private registerController() {
-    this.on(({ route, pageKey, location }) => {
-      const url = createPath(location)
-      const params = parseParams(location.search)
-      const record = {
-        url,
-        params,
-        pageKey,
-        ...route
-      }
+    this.on(
+      ({ route: { component, path, ...restRoute }, pageKey, location }) => {
+        const url = createPath(location)
+        const params = parseParams(location.search)
+        const variables = match(path, { decode: decodeURIComponent })(url)
+        const record = {
+          ...restRoute,
+          path,
+          url,
+          pageKey,
+          params: {
+            ...params,
+            ...variables
+          },
+          node: createElement(component, { key: pageKey })
+        }
 
-      if (isTabRoute(record)) {
-        this.stack.switchTab(record)
-      } else {
-        this.stack.jumpPage(record)
-      }
+        if (isTabRoute(record)) {
+          this.stack.switchTab(record)
+        } else {
+          this.stack.jumpPage(record)
+        }
 
-      this.notify()
-    })
+        this.notify()
+      }
+    )
   }
 
   /**

@@ -1,11 +1,12 @@
 import {
   ComponentClass,
   ComponentType,
-  createElement,
   FunctionComponent,
   ReactElement,
   ReactNode
 } from 'react'
+
+import { pathToRegexp } from 'path-to-regexp'
 
 import { warning } from '../utils/diagnosis'
 import { normalizePath } from '../utils/url'
@@ -77,23 +78,23 @@ export const matchRoute = (routes: Route[], nameOrPath?: string) => {
   let route: Route | undefined
 
   if (nameOrPath) {
-    route = routes.find(
-      ({ name, path }) =>
-        name === nameOrPath || normalizePath(path) === normalizePath(nameOrPath)
-    )
+    route = routes.find(({ name, path }) => {
+      if (name === nameOrPath) {
+        return true
+      }
+
+      const currentPath = normalizePath(path)
+      const targetPath = normalizePath(nameOrPath)
+
+      if (currentPath === targetPath) {
+        return true
+      }
+
+      return pathToRegexp(currentPath).exec(targetPath) !== null
+    })
   }
 
   warning(!route, `Route not found when name or path is  \`${nameOrPath}\` `)
 
   return route
-}
-
-export const getMatchRecord = ({
-  component,
-  ...restRecord
-}: ResolveRecord): MatchRecord => {
-  return {
-    ...restRecord,
-    node: createElement(component, { key: restRecord.pageKey })
-  }
 }

@@ -1,11 +1,4 @@
-import {
-  getMatchRecord,
-  isSameRoute,
-  MatchRecord,
-  RecordRaw,
-  ResolveRecord,
-  RouteRaw
-} from './route'
+import { isSameRoute, MatchRecord, RecordRaw, RouteRaw } from './route'
 
 export class Stack {
   private tabs: MatchRecord[] = []
@@ -40,22 +33,22 @@ export class Stack {
     return items[items.length - delta - 1]
   }
 
-  switchTab(record: ResolveRecord) {
+  switchTab(record: MatchRecord) {
     if (this.containsTab(record)) {
       this.tabs.sort(tab => (isSameRoute(tab, record) ? -1 : 0))
     } else {
-      this.tabs.push(getMatchRecord(record))
+      this.tabs.push(record)
     }
     this.clear(false)
   }
 
-  jumpPage(record: ResolveRecord) {
+  jumpPage(record: MatchRecord) {
     const pageIndex = this.findPageIndex(record)
 
     if (pageIndex > -1) {
       this.pages.splice(pageIndex + 1, this.pages.length - pageIndex - 1)
     } else {
-      this.pages.push(getMatchRecord(record))
+      this.pages.push(record)
     }
   }
 

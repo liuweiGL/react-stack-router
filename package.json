@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "history": "^5.3.0",
+    "path-to-regexp": "^6.2.0",
     "react-freeze": "^1.0.0"
   },
   "devDependencies": {
