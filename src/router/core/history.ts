@@ -69,6 +69,7 @@ export class ProHistory {
   private subscriber: ProSubscriber
 
   private stack: Stack
+  private routeResolveTimestamp?: number
 
   private routeMap: Map<string, NormalizedRoute> = new Map()
   private blockerMap: Map<number, ProBlocker> = new Map()
@@ -120,7 +121,7 @@ export class ProHistory {
     return route
   }
 
-  private async resolveRouteRecord(pathname: string) {
+  private async resolveRoute(pathname: string) {
     const route = this.matchRoute(pathname)
 
     if (!route) {
@@ -133,7 +134,7 @@ export class ProHistory {
       return this.routeMap.get(path)
     }
 
-    let routeRecord: NormalizedRoute
+    let result: NormalizedRoute
 
     if (isLazyComponent(component)) {
       const resolvedComponent = await loadLazyComponent(component)
@@ -142,20 +143,20 @@ export class ProHistory {
         throw new Error(`Couldn't resolve component  at "${path}"`)
       }
 
-      routeRecord = {
+      result = {
         ...route,
         component: resolvedComponent
       }
     } else {
-      routeRecord = {
+      result = {
         ...route,
         component
       }
     }
 
-    this.routeMap.set(path, routeRecord)
+    this.routeMap.set(path, result)
 
-    return routeRecord
+    return result
   }
 
   private redirectTo404() {
@@ -190,7 +191,16 @@ export class ProHistory {
         return
       }
 
-      const route = await this.resolveRouteRecord(path)
+      const routeResolveTimestamp = Date.now()
+
+      this.routeResolveTimestamp = routeResolveTimestamp
+
+      const route = await this.resolveRoute(path)
+
+      // 懒加载路由在连续多次变化时当前 route 跟 location 可能不一致
+      if (this.routeResolveTimestamp !== routeResolveTimestamp) {
+        return
+      }
 
       if (!route) {
         return
