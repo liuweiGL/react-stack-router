@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/liuweiGL/react-stack-router/compare/v2.3.3...v2.3.4) (2022-07-05)
+
+
+### Bug Fixes
+
+* 路由懒加载时解析到的 route 可能跟当前 location 不一致 ([674266f](https://github.com/liuweiGL/react-stack-router/commit/674266fb407da4965be5bc145dfeecc5938f09b3))
+
 ## [2.3.3](https://github.com/liuweiGL/react-stack-router/compare/v2.3.2...v2.3.3) (2022-03-31)
 
 
